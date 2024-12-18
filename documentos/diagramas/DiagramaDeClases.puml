@@ -1,0 +1,183 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+
+class TematicaEstudio {
+'-------ATRIBUTOS----------
+ - id: Long
+' - estudiante: Estudiante
+ - nombre: String
+ - descripcion: String
+ - mazos: Set<Mazo>
+
+ '-------METODOS----------
+ + puntosGastados(): float
+}
+
+TematicaEstudio -->"*"Mazo
+'TematicaEstudio -->Estudiante
+
+
+
+' -----------------------------------------
+
+class Mazo {
+'-------ATRIBUTOS----------
+ - id: Long
+' - estudiante: Estudiante
+ - nombre: String
+ - descripcion: String
+ - tarjetas: Set<Tarjeta>
+
+ '-------METODOS----------
+
+}
+
+Mazo -->"*"MemoCard
+
+' -----------------------------------------
+
+class MemoCard {
+'-------ATRIBUTOS----------
+ - id: Long
+ - nombre: String
+ - pregunta: String
+ - respuesta: RespuestaMemo
+ - estadoAprendizaje: EstadoMemoCard
+ - intervaloMinutos: Long
+
+ '-------METODOS----------
+ + cambiarEstado(nuevoEstado: CambioEstado): void
+
+}
+
+MemoCard --> RespuestaMemo
+MemoCard o--> EstadoMemoCard
+
+' -----------------------------------------
+
+Class RespuestaMemo {
+'-------ATRIBUTOS----------
+ - id: Long
+ - texto: String
+ - rutaImagen: String
+ - rutaAudio: String
+ - rutaVideo: String
+ '-------METODOS-----------
+}
+
+' ---------------Patron-State-----------------------
+
+Abstract EstadoMemoCard {
+'-------ATRIBUTOS----------
+ - id: Long
+ - carta: MemoCard
+ '-------METODOS-----------
++calcularIntervalo(): void
++actualizarEstado(nuevoEstado: EstodoMemoCard): void
+}
+
+' -----------------------------------------
+
+class Aprendizaje {
+'-------ATRIBUTOS----------
+ -umbralIntevaloMax: Long
+ -cantidadDeAciertos: Integer
+'-------METODOS----------
+ +calcularIntervalo(): void
+ +actualizarEstado(nuevoEstado: Repaso): void
+}
+Aprendizaje --|> EstadoMemoCard
+Aprendizaje ..> Repaso
+' -----------------------------------------
+
+class Repaso {
+'-------ATRIBUTOS----------
+
+'-------METODOS----------
+ +calcularIntervalo(): void
+ +actualizarEstado(nuevoEstado: Reaprendizaje): void
+}
+Repaso --|> EstadoMemoCard
+Repaso ..> Reaprendizaje
+' -----------------------------------------
+class Reaprendizaje {
+'-------ATRIBUTOS----------
+
+'-------METODOS----------
+ +calcularIntervalo(): void
+ +actualizarEstado(nuevoEstado: Repaso): void
+}
+Reaprendizaje --|> EstadoMemoCard
+Repaso <.. Reaprendizaje
+' -----------------------------------------
+
+
+
+
+' -----------------------------------------
+
+class Estudiante {
+'-------ATRIBUTOS----------
+ - nombre: String
+ - usuario: Usuario
+ - apellido: String
+ - tematicas: Set<TematicaEstudio>
+'-------METODOS----------
+}
+Estudiante --> Usuario
+Estudiante -->"*" TematicaEstudio
+
+' -----------------------------------------
+
+class Usuario {
+ - nombre: String
+ - clave: String
+ - rol: Rol
+ '+ cambiarClave(clave: String, validador: ValidadorDeClave): void
+}
+
+
+/'
+
+Usuario --> Rol
+Usuario ..> ValidadorDeClave
+
+
+' -----------------------------------------
+
+class Rol {
+ - nombre: String
+ - permisos: Set<Permiso>
+ + tenesPermiso(permiso: Permiso): boolean
+}
+
+Rol --> " * "Permiso
+
+' -----------------------------------------
+
+class Permiso {
+ - nombre: String
+}
+
+' -----------------------------------------
+
+class ValidadorDeClave {
+ - validadores: Set<TipoValidacion>
+ + esValido(clave: String): boolean
+}
+
+ValidadorDeClave --> " * " TipoValidacion
+
+' -----------------------------------------
+
+interface TipoValidacion {
+ + validar(clave: String): boolean
+ + getMensajeError(): String
+}
+'/
+
+
+
+@enduml
