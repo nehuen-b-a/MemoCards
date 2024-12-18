@@ -58,9 +58,10 @@ class MemoCard {
 
 MemoCard --> RespuestaMemo
 MemoCard o--> EstadoMemoCard
-
+MemoCard ..> Configurador
 
 ' -----------------------------------------
+
 
 class SesionDeEstudio {
 '-------ATRIBUTOS----------
