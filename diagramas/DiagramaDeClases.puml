@@ -1,0 +1,194 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+class PersonaHumana {
+ - id: Long
+ - usuario: Usuario
+ - tipoDocumento: TipoDocumento
+ - nroDocumento: String
+ - contacto: Contacto
+ - direccion: Direccion
+ - nombre: String
+ - apellido: String
+ - fechaNacimiento: LocalDate
+ - contribucionesElegidas: Set<FormasContribucionHumanas>
+ - contribuciones: Set<Contribucion>
+ - ofertasCanjeadas: Set<OfertaCanjeada>
+ - formulario: List<Respuesta>
+ - tarjetasColaboracion: List<Tarjeta>
+ - tarjetaEnUso: Tarjeta
+ + puntosGastados(): float
+ + calcularPuntajeNeto(): float
+ + agregarContribucion(contribucion: Contribucion): void
+ + agregarOfertaCanjeada(ofertaCanjeada: OfertaCanjeada): void
+ + agregarTarjetaSinEntregar(tarjeta: Tarjeta): void
+ + agregarRespuestaAlFormulario(respuesta: Respuesta): void
+ + agregarFormaDeContribucion(forma: FormasContribucionHumanas): void
+ + quitarFormaDeContribucion(forma: FormasContribucionHumanas): void
+ + usarTarjeta(heladera: Heladera): void
+ + asignarTarjetaParaColaborar(tarjeta: Tarjeta): void
+ + serNotificadoPor(mensaje: Mensaje): void
+}
+
+PersonaHumana --> " * " Contribucion
+PersonaHumana --> Contacto
+PersonaHumana --> Direccion
+PersonaHumana --> " * " FormasContribucionHumanas
+PersonaHumana --> Usuario
+PersonaHumana --> " * " OfertaCanjeada
+PersonaHumana --> " * " Respuesta
+PersonaHumana --> " * "Tarjeta
+PersonaHumana --> Tarjeta
+PersonaHumana ..|> IObserverNotificacion
+PersonaHumana --> TipoDocumento
+
+' -----------------------------------------
+
+interface IObserverNotificacion {
+ + serNotificadoPor(mensaje: Mensaje): void
+}
+
+note right
+Desacopla al notificador del notificado
+end note
+
+' -----------------------------------------
+
+class Vianda {
+ - fechaCaducidad: LocalDate
+ - entregada: boolean
+ - comida: String
+ - pesoEnGramos: float
+ - fechaDonacion: LocalDate
+ + calcularPuntaje(): float
+ + estaVencida(): boolean
+}
+
+Vianda ..|> Contribucion
+
+' -----------------------------------------
+
+class PublicadorSolicitudApertura {
+  - client: MqttClient
+  - static broker: String
+
+  + publicarSolicitudApertura(codigoTarjeta: String, fecha: LocalDateTime, idHeladera: Long): void
+}
+Heladera ..> PublicadorSolicitudApertura
+
+' -----------------------------------------
+
+class Tarjeta {
+ - id: Long
+ - nombre: String
+ - direccion: Direccion
+ - fechaRegistro: LocalDate
+ - capacidadMaximaViandas: int
+ - modelo: Modelo
+ - viandas: Set<Vianda>
+ - estado: EstadoHeladera
+ - temperaturaEsperada: float
+ - historialEstados: List<CambioEstado>
+ - historialTemperaturas: List<CambioTemperatura>
+ - solicitudesDeApertura: List<SolicitudApertura>
+ - gestorSuscripciones: GestorSuscripciones
+ - static minutosMargenFallaConexion: int
+
+ + ingresarViandas(viandas: List<Vianda>): void
+ + quitarViandas(viandas: List<Vianda>): void
+ + cambiarEstado(nuevoEstado: CambioEstado): void
+ + cambiarTemperatura(temperatura: float): void
+}
+
+Heladera --> " * " Vianda
+Heladera --> Modelo
+Heladera --> Direccion
+Heladera ..|> Contribucion
+Heladera --> EstadoHeladera
+Heladera --> " * " CambioEstado
+Heladera --> " * " CambioTemperatura
+Heladera --> " * " SolicitudApertura
+Heladera --> GestorSuscripciones
+
+' -----------------------------------------
+
+class ReceptorAperturaHeladera {
+ - IRepositorioHeladera repositorioHeladera
+ + messageArrived(topic: String, mensaje: MqttMessage): void
+ - dividirPayload(payload: String): String[]
+ - procesarMensaje(idHeladera: Long, tipoMensaje: String, codigoTarjeta: String): void
+}
+
+ReceptorHeladera ..> Heladera
+
+' -----------------------------------------
+
+class ValidadorConexion {
+ - heladerasRepositorio: IRepositoryHeladera
+ + validarConexiones(): void
+}
+
+ValidadorConexion ..> Heladera
+
+note right
+La falla de conexión se verificará validando la última recepción de temperatura de cada heladera con un cronjob: ValidadorConexion.
+La cantidad de tiempo límite desde que se recibió la última temperatura estará parametrizada.
+end note
+
+' -----------------------------------------
+
+class GestorSuscripciones {
+  - suscripcionesPorTipo: Map<TipoSuscripcion, List<Suscripcion>>
+  + notificar(tipo: TipoSuscripcion, heladera: Heladera): void
+  + agregarSuscripcionPorTipo(tipo: TipoSuscripcion, suscripcion: Suscripcion, heladera: Heladera): void
+  + suscripcionValida(suscriptor: IObserverNotificacion, heladera: Heladera): boolean
+}
+
+GestorSuscripciones --> " * " Suscripcion
+GestorSuscripciones --> " * " TipoSuscripcion
+
+enum TipoSuscripcion {
+ FALTAN_N_VIANDAS
+ DESPERFECTO
+ QUEDAN_N_VIANDAS
+}
+
+class Suscripcion {
+ - suscriptor: IObserverNotificacion
+ + notificar(heladera: Heladera): void
+ - armarMensaje(heladera: Heladera): Mensaje
+ # cumpleCondicion(heladera: Heladera): boolean
+ # armarCuerpo(heladera: Heladera): String
+}
+
+'---------------------------------
+class Usuario {
+ - nombre: String
+ - clave: String
+ - rol: Rol
+ + cambiarClave(clave: String, validador: ValidadorDeClave): void
+}
+
+Usuario --> Rol
+Usuario ..> ValidadorDeClave
+
+
+' -----------------------------------------
+
+class Rol {
+ - nombre: String
+ - permisos: Set<Permiso>
+ + tenesPermiso(permiso: Permiso): boolean
+}
+
+Rol --> " * "Permiso
+
+' -----------------------------------------
+
+class Permiso {
+ - nombre: String
+}
+
+
+
+@enduml
