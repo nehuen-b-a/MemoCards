@@ -1,0 +1,242 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+
+class TematicaEstudio {
+'-------ATRIBUTOS----------
+ - id: Long
+ - nombre: String
+ - descripcion: String
+ - mazos: Set<Mazo>
+
+ '-------METODOS----------
+}
+
+TematicaEstudio -->"*"Mazo
+'TematicaEstudio -->Estudiante
+
+
+
+' -----------------------------------------
+
+class Mazo {
+'-------ATRIBUTOS----------
+ - id: Long
+ - nombre: String
+ - descripcion: String
+ - tarjetas: Set<Tarjeta>
+ - tarjetasVistas: Set<Tarjeta>
+ - historialDeEstudio: List<SesionDeEstudio>
+
+ '-------METODOS----------
++iniciarSesionDeEstudio():Void
+}
+
+Mazo -->"*"MemoCard
+
+' -----------------------------------------
+
+class MemoCard {
+'-------ATRIBUTOS----------
+ - id: Long
+ - nombre: String
+ - pregunta: String
+ - respuesta: RespuestaMemo
+ - fechaUltimoRepaso: LocalDateTime
+ - estadoAprendizaje: EstadoMemoCard
+ - historialEstados: List<HistorialEstadoMemoCard>
+ - intervaloMinutos: Long
+ - cantidadDeOlvidos: Integer
+ - EsSanguijuela: Boolean
+
+ '-------METODOS----------
+ + cambiarEstado(nuevoEstado: EstadoMemoCard, preferencias: Configurador): void
+ + reiniciarTarjeta(): void
+
+}
+
+MemoCard --> RespuestaMemo
+MemoCard o--> EstadoMemoCard
+MemoCard ..> Configurador
+
+' -----------------------------------------
+
+
+class SesionDeEstudio {
+'-------ATRIBUTOS----------
+ - id: Long
+ - estudiante: Estudiante
+ - mazo: Mazo
+ - tiempoEstudio: Long
+ - tarjetasRevisadas: Set<MemoCard>
+ - fechaInicio: LocalDateTime
+ - fechaFin: LocalDateTime
+ - estaFinalizada : Boolean
+
+'-------METODOS----------
++ iniciarSesion(): void
++ finalizarSesion(): void
++ registrarMetrica(): void
++ obtenerMetrica(): Map<String, Object>
+}
+
+' Relación con Estudiante y Mazo
+SesionDeEstudio --> Estudiante
+SesionDeEstudio <--> Mazo
+SesionDeEstudio --> MemoCard
+
+' -----------------------------------------
+
+Class RespuestaMemo {
+'-------ATRIBUTOS----------
+ - id: Long
+ - texto: String
+ - rutaImagen: String
+ - rutaAudio: String
+ - rutaVideo: String
+ '-------METODOS-----------
+}
+
+' ---------------Patron-State-----------------------
+
+Abstract EstadoMemoCard {
+'-------ATRIBUTOS----------
+ - id: Long
+ - nombre: String
+ - carta: MemoCard
+ '-------METODOS-----------
++calcularIntervalo(intervalo: Integer , dificultad: Integer): void
++actualizarEstado(nuevoEstado: EstodoMemoCard): void
+}
+
+' -----------------------------------------
+
+class Aprendizaje {
+'-------ATRIBUTOS----------
+ -umbralIntevaloMax: Long
+ -cantidadDeAciertos: Integer
+'-------METODOS----------
++calcularIntervalo(intervalo: Integer , dificultad: Integer): void
+ +actualizarEstado(nuevoEstado: Repaso): void
+}
+Aprendizaje --|> EstadoMemoCard
+Aprendizaje ..> Repaso
+' -----------------------------------------
+
+class Repaso {
+'-------ATRIBUTOS----------
+-coeficienteDeRetencion: Float
+'-------METODOS----------
++calcularIntervalo(intervalo: Integer , dificultad: Integer): void
+ +actualizarEstado(nuevoEstado: Reaprendizaje): void
+}
+Repaso --|> EstadoMemoCard
+Repaso ..> Reaprendizaje
+
+' -----------------------------------------
+class Reaprendizaje {
+'-------ATRIBUTOS----------
+ -umbralIntevaloMax: Long
+ -cantidadDeAciertos: Integer
+'-------METODOS----------
++calcularIntervalo(intervalo: Integer , dificultad: Integer): void
+ +actualizarEstado(nuevoEstado: Repaso): void
+}
+Reaprendizaje --|> EstadoMemoCard
+Repaso <.. Reaprendizaje
+' -----------------------------------------
+class HistorialEstadoMemoCard {
+'----- ATRIBUTOS ---------
+    - id: Long
+    - memoCard: MemoCard
+    - estadoAnterior: EstadoMemoCard
+    - estadoNuevo: EstadoMemoCard
+    - fechaCambio: LocalDateTime
+}
+HistorialEstadoMemoCard --> MemoCard
+HistorialEstadoMemoCard --> EstadoMemoCard
+
+' -----------------------------------------
+
+class Configurador {
+'-------ATRIBUTOS----------
+ - intervaloInicial: List<Long>
+ - factorFacilidad: Float
+ - bonusFacil: Float
+ - intervaloDificil: Float
+ - intervaloMinimo: Long
+ - intervaloMaximo: Long
+ - umbralSanguijuelas: Integer
+
+'-------METODOS----------
+ + obtenerParametros(): Map<String, Object>
+ + actualizarParametro(nombreParametro: String, nuevoValor: Object): void
+}
+
+
+' -----------------------------------------
+
+class Estudiante {
+'-------ATRIBUTOS----------
+ - nombre: String
+ - usuario: Usuario
+ - apellido: String
+ - tematicas: Set<TematicaEstudio>
+ - preferencias: Configurador
+'-------METODOS----------
+}
+Estudiante --> Usuario
+Estudiante -->"*" TematicaEstudio
+Estudiante --> Configurador
+
+' -----------------------------------------
+
+class Usuario {
+ - nombre: String
+ - clave: String
+ - rol: Rol
+ '+ cambiarClave(clave: String, validador: ValidadorDeClave): void
+}
+
+
+Usuario --> Rol
+Usuario ..> ValidadorDeClave
+
+
+' -----------------------------------------
+
+class Rol {
+ - nombre: String
+ - permisos: Set<Permiso>
+ + tenesPermiso(permiso: Permiso): boolean
+}
+
+Rol --> " * "Permiso
+
+' -----------------------------------------
+
+class Permiso {
+ - nombre: String
+}
+
+' -----------------------------------------
+
+class ValidadorDeClave {
+ - validadores: Set<TipoValidacion>
+ + esValido(clave: String): boolean
+}
+
+ValidadorDeClave --> " * " TipoValidacion
+
+' -----------------------------------------
+
+interface TipoValidacion {
+ + validar(clave: String): boolean
+ + getMensajeError(): String
+}
+
+
+
+
+@enduml
