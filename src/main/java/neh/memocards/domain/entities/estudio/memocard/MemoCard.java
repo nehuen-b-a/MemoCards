@@ -1,11 +1,14 @@
 package neh.memocards.domain.entities.estudio.memocard;
 
+import lombok.Getter;
 import neh.memocards.domain.entities.estudio.Configurador;
 import neh.memocards.domain.entities.estudio.memocard.estados.EstadoMemoCard;
 import neh.memocards.domain.entities.estudio.memocard.estados.HistorialEstadoMemoCard;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+@Getter
 
 public class MemoCard {
     // Atributos
