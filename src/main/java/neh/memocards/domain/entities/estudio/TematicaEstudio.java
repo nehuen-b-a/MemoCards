@@ -5,18 +5,20 @@ import lombok.Setter;
 
 import java.util.Set;
 
+@Getter
 public class TematicaEstudio {
     // Atributos
-    @Setter @Getter
+    @Setter
     private Long id;
-    @Setter @Getter
+    @Setter
     private String nombre;
-    @Setter @Getter
+    @Setter
     private String descripcion;
     @Getter
     private Set<Mazo> mazos;
 
     // Métodos (por implementar según necesidades)
+
 
     public void agregarMazo(Mazo mazo){
         this.mazos.add(mazo);

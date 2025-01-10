@@ -7,12 +7,13 @@ import lombok.Setter;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 import neh.memocards.domain.entities.usuarios.Usuario;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class Estudiante {
@@ -27,6 +28,10 @@ public class Estudiante {
     private List<Configurador> preferencias;
 
     // Metodos
+    public Estudiante (){
+        tematicas = new HashSet<TematicaEstudio>();
+        preferencias = new ArrayList<>();
+    }
 
     public void agregarTematicaDeEstudio(TematicaEstudio tematica) {
         if(laTematicaEsExistente(tematica)) {

@@ -5,23 +5,30 @@ import lombok.Setter;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
 import java.util.*;
-
+@Getter
 public class Mazo {
     // Atributos
-    @Setter @Getter
+    @Setter
     private Long id;
-    @Setter @Getter
+    @Setter
     private String nombre;
-    @Setter @Getter
+    @Setter
     private String descripcion;
-    @Getter
+
     private Set<MemoCard> tarjetasNoVistas;
-    @Getter
+
     private Set<MemoCard> tarjetasVistas;
-    @Getter
+
     private List<SesionDeEstudio> historialDeEstudio;
 
     // Métodos
+
+    public Mazo() {
+        historialDeEstudio = new ArrayList<>();
+        tarjetasNoVistas = new HashSet<>();
+        tarjetasVistas = new HashSet<>();
+    }
+
     public void iniciarSesionDeEstudio() {
         // Implementación pendiente
     }
@@ -53,4 +60,5 @@ public class Mazo {
         this.tarjetasVistas.addAll(memoCards);
         this.tarjetasNoVistas.removeAll(memoCards);
     }
+
 }
