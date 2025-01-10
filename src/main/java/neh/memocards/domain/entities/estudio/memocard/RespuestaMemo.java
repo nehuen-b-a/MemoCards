@@ -1,4 +1,4 @@
-package neh.memocards.domain.estudio.memocard;
+package neh.memocards.domain.entities.estudio.memocard;
 
 public class RespuestaMemo {
     // Atributos

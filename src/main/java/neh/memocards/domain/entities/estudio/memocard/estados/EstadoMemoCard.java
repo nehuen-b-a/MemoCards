@@ -1,6 +1,6 @@
-package neh.memocards.domain.estudio.memocard.estados;
+package neh.memocards.domain.entities.estudio.memocard.estados;
 
-import domain.entities.estudio.memocard.MemoCard;
+import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
 public abstract class EstadoMemoCard {
     // Atributos

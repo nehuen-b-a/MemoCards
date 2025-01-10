@@ -1,6 +1,6 @@
-package neh.memocards.domain.estudio;
+package neh.memocards.domain.entities.estudio;
 
-import domain.entities.usuario.Usuario;
+import neh.memocards.domain.entities.usuarios.Usuario;
 
 import java.util.Set;
 

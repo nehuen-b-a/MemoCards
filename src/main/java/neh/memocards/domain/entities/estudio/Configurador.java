@@ -1,4 +1,4 @@
-package neh.memocards.domain.estudio;
+package neh.memocards.domain.entities.estudio;
 
 import java.util.List;
 import java.util.Map;

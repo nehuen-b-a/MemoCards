@@ -1,4 +1,4 @@
-package neh.memocards.domain.validador;
+package neh.memocards.domain.entities.validador;
 
 public class AusenciaDeCredencialesPorDefecto implements TipoValidacion {
   private String usuario;

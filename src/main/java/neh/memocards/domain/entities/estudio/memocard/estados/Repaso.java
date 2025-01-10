@@ -1,10 +1,8 @@
-package neh.memocards.domain.estudio.memocard.estados;
+package neh.memocards.domain.entities.estudio.memocard.estados;
 
-
-public class Aprendizaje extends EstadoMemoCard {
+public class Repaso extends EstadoMemoCard {
     // Atributos
-    private Long umbralIntevaloMax;
-    private Integer cantidadDeAciertos;
+    private Float coeficienteDeRetencion;
 
     // Métodos
     @Override

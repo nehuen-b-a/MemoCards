@@ -1,4 +1,4 @@
-package neh.memocards.domain.usuarios;
+package neh.memocards.domain.entities.usuarios;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
-package neh.memocards.domain.estudio;
+package neh.memocards.domain.entities.estudio;
 
-import domain.entities.estudio.memocard.MemoCard;
+import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
 import java.util.List;
 import java.util.Set;

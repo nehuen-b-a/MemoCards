@@ -1,8 +1,8 @@
-package neh.memocards.domain.estudio.memocard;
+package neh.memocards.domain.entities.estudio.memocard;
 
-import domain.entities.estudio.Configurador;
-import domain.entities.estudio.memocard.estados.EstadoMemoCard;
-import domain.entities.estudio.memocard.estados.HistorialEstadoMemoCard;
+import neh.memocards.domain.entities.estudio.Configurador;
+import neh.memocards.domain.entities.estudio.memocard.estados.EstadoMemoCard;
+import neh.memocards.domain.entities.estudio.memocard.estados.HistorialEstadoMemoCard;
 
 import java.time.LocalDateTime;
 import java.util.List;
