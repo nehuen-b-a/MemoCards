@@ -8,7 +8,9 @@ import java.util.List;
 
 public class Aprendizaje extends EstadoMemoCard {
     // Atributos
-    private Long umbralIntevaloMax;
+
+    private List<Long> intervalos;
+
     private Integer cantidadDeAciertos;
 
     // Métodos
@@ -24,10 +26,7 @@ public class Aprendizaje extends EstadoMemoCard {
 
     public Aprendizaje(MemoCard memoCard) {
         super(memoCard,"APRENDIZAJE");
-
-        List <Long> intervaloInicial = memoCard.getConfigurador().getIntervaloInicial();
-        this.umbralIntevaloMax = intervaloInicial.get(intervaloInicial.size() - 1);
-
+        this.intervalos = memoCard.getConfigurador().getIntervaloInicial();
         this.cantidadDeAciertos = 0;
     }
 }

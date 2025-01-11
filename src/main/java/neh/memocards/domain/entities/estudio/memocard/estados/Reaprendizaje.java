@@ -4,11 +4,10 @@ import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class Reaprendizaje extends EstadoMemoCard {
     // Atributos
-    private Long umbralIntevaloMax;
+    private List<Long> intervalos;
     private Long intevaloMin;
     private Integer cantidadDeAciertos;
 
@@ -26,18 +25,17 @@ public class Reaprendizaje extends EstadoMemoCard {
     public Reaprendizaje(MemoCard memoCard) {
         super(memoCard,"REAPRENDIZAJE");
 
-        List<Long> intervaloInicial = memoCard.getConfigurador().getIntervaloInicial();
-        this.umbralIntevaloMax = intervaloInicial.get(intervaloInicial.size() - 1);
+        this.intervalos = memoCard.getConfigurador().getIntervaloInicial();
 
-        int posMayorAUnDia = IntStream.range(0, intervaloInicial.size()) // Creamos un flujo de índices
-                .filter(i -> intervaloInicial.get(i) > 1440L)
+        int posMayorAUnDia = IntStream.range(0, this.intervalos.size()) // Creamos un flujo de índices
+                .filter(i -> this.intervalos.get(i) > 1440L)
                 .findFirst()
                 .orElse(-1);
         if(posMayorAUnDia == -1){
             this.intevaloMin = 1440L;
         }
         else{
-            this.intevaloMin= intervaloInicial.get(posMayorAUnDia);
+            this.intevaloMin= this.intervalos.get(posMayorAUnDia);
         }
         this.cantidadDeAciertos = 0;
     }

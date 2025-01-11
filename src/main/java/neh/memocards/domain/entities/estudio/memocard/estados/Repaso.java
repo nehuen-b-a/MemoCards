@@ -2,7 +2,6 @@ package neh.memocards.domain.entities.estudio.memocard.estados;
 
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
-import java.util.List;
 
 public class Repaso extends EstadoMemoCard {
     // Atributos
