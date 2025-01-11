@@ -1,5 +1,9 @@
 package neh.memocards.domain.entities.estudio.memocard;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter @Getter
 public class RespuestaMemo {
     // Atributos
     private Long id;
