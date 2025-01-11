@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 @Setter @Getter
 @AllArgsConstructor
 public class Configurador {
