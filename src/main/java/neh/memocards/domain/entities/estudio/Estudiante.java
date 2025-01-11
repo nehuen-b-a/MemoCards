@@ -65,7 +65,7 @@ public class Estudiante {
             throw new RuntimeException("No se puede agregar un Mazo sin una Tematica asociada");
         }
         if(tematica.elMazoEsExistente(mazo)){
-            throw new RuntimeException("No se puede agregar un Mazo sin existe uno con mismo Id o Nombre");
+            throw new RuntimeException("No se puede agregar un Mazo si existe uno con mismo Id o Nombre");
         }
         tematica.agregarMazo(mazo);
     }

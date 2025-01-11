@@ -2,11 +2,12 @@ package neh.memocards.domain.entities.estudio.memocard;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import neh.memocards.domain.entities.estudio.Configurador;
+import neh.memocards.domain.entities.estudio.memocard.estados.Aprendizaje;
 import neh.memocards.domain.entities.estudio.memocard.estados.EstadoMemoCard;
 import neh.memocards.domain.entities.estudio.memocard.estados.HistorialEstadoMemoCard;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public class MemoCard {
     private LocalDateTime fechaUltimoRepaso;
     @Setter
     private EstadoMemoCard estadoAprendizaje;
+    @Setter
+    private Configurador configurador;
 
     private List<HistorialEstadoMemoCard> historialEstados;
 
@@ -45,12 +48,13 @@ public class MemoCard {
         historialEstados = new ArrayList<>();
     }
 
-    public void cambiarEstado(EstadoMemoCard nuevoEstado, Configurador preferencias) {
-        // Implementación pendiente
+    public void cambiarEstado(EstadoMemoCard nuevoEstado) {
+        HistorialEstadoMemoCard nuevoRegistroDeEstado  = new HistorialEstadoMemoCard(this, estadoAprendizaje, nuevoEstado);
+        historialEstados.add(nuevoRegistroDeEstado);
+        estadoAprendizaje = nuevoEstado;
     }
 
-    public void reiniciarTarjeta() {
-        // Implementación pendiente
-    }
+
+    public void reiniciarTarjeta() { Aprendizaje nuevoEstado = new Aprendizaje(this); cambiarEstado(nuevoEstado);}
 }
 

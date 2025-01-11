@@ -14,6 +14,8 @@ public class Mazo {
     private String nombre;
     @Setter
     private String descripcion;
+    @Setter
+    private Configurador preferencia;
 
     private Set<MemoCard> tarjetasNoVistas;
 

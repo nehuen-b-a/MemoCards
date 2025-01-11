@@ -12,4 +12,9 @@ public abstract class EstadoMemoCard {
     public abstract void calcularIntervalo(Integer intervalo, Integer dificultad);
 
     public abstract void actualizarEstado(EstadoMemoCard nuevoEstado);
+
+    public EstadoMemoCard(MemoCard carta, String nombre) {
+        this.carta = carta;
+        this.nombre = nombre;
+    }
 }

@@ -1,8 +1,11 @@
 package neh.memocards.domain.entities.estudio;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 import java.util.Map;
-
+@Setter @Getter
 public class Configurador {
     // Atributos
     private List<Long> intervaloInicial;

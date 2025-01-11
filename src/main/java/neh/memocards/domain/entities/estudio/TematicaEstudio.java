@@ -3,6 +3,7 @@ package neh.memocards.domain.entities.estudio;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -18,6 +19,11 @@ public class TematicaEstudio {
     private Set<Mazo> mazos;
 
     // Métodos (por implementar según necesidades)
+
+
+    public TematicaEstudio() {
+        this.mazos = new HashSet<>();
+    }
 
 
     public void agregarMazo(Mazo mazo){

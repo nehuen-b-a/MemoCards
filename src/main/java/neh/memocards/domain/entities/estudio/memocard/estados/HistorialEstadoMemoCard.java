@@ -13,4 +13,11 @@ public class HistorialEstadoMemoCard {
     private LocalDateTime fechaCambio;
 
     // Métodos (por implementar según necesidades)
+    public HistorialEstadoMemoCard( MemoCard memoCard, EstadoMemoCard estadoAnterior, EstadoMemoCard estadoNuevo) {
+        this.memoCard = memoCard;
+        this.estadoAnterior = estadoAnterior;
+        this.estadoNuevo = estadoNuevo;
+        this.fechaCambio = LocalDateTime.now();
+    }
+
 }
