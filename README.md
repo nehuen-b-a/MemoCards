@@ -8,25 +8,36 @@ El repositorio está organizado de la siguiente manera:
 
 ```plaintext
 MemoCards/
-├── documentos/                   # Documentación y diagramas del proyecto
+├── documentation/               # Documentación y diagramas del proyecto
 │   ├── MemoCards_Requerimientos.pdf
-│   └── diagramas/
+│   └── diagrams/
 │       └── DiagramaDeClases.puml
 ├── src/                          # Código fuente principal del proyecto
 │   ├── main/
 │   │   ├── java/
-│   │   │   ├── domain/           # Lógica de negocio
-│   │   │   │   ├── entities/    # Entidades principales
-│   │   │   │   ├── usuario/     # Gestión de usuarios y roles
-│   │   │   │   └── estados/     # Estados de las tarjetas
-│   │   │   └── org/example/
-│   │   │       └── Main.java    # Punto de entrada de la aplicación
+│   │   │   └── neh/memocards/    # Paquete principal del proyecto
+│   │   │       ├── controllers/ # Controladores que gestionan las solicitudes HTTP
+│   │   │       ├── domain/      # Lógica de negocio
+│   │   │       │   ├── entities/
+│   │   │       │   │   ├── estudio/      # Entidades relacionadas con el estudio
+│   │   │       │   │   ├── memocard/     # Entidades relacionadas con las tarjetas
+│   │   │       │   │   └── usuarios/     # Entidades relacionadas con usuarios y roles
+│   │   │       │   └── validador/        # Validadores para contraseñas y otras reglas
+│   │   │       ├── dtos/          # Objetos de transferencia de datos
+│   │   │       └── view/          # Lógica relacionada con la presentación
 │   │   └── resources/
-│   │       └── public/          # Recursos estáticos (HTML, CSS, imágenes)
-│   └── tests/                   # Pruebas unitarias y de integración
-├── pom.xml                      # Configuración y dependencias de Maven
-├── README.md                    # Documentación principal
-└── .gitignore                   # Archivos y carpetas ignorados por Git
+│   │       ├── application.properties  # Configuración de Spring Boot
+│   │       ├── public/            # Recursos estáticos (HTML, CSS, imágenes)
+│   │       ├── static/            # Archivos estáticos
+│   │       └── templates/         # Plantillas de la vista (si se utilizan)
+│   └── test/
+│       └── java/neh/memocards/    # Pruebas unitarias y de integración
+├── .idea/                        # Configuración del IDE
+├── .mvn/                         # Configuración de Maven Wrapper
+├── target/                       # Archivos generados al compilar el proyecto
+├── pom.xml                       # Configuración y dependencias de Maven
+├── README.md                     # Documentación principal
+└── .gitignore                    # Archivos y carpetas ignorados por Git
 ```
 
 ## Instalación
@@ -56,40 +67,26 @@ Para ejecutar el proyecto localmente, sigue los siguientes pasos:
 
 ### 1. Arquitectura MVC
 - **Modelo**: Implementado con Spring Data JPA para interactuar con SQL Server.
-- **Vista**: Generada de forma dinámica con Handlebars y Bootstrap.
-- **Controlador**: Maneja las solicitudes HTTP, expone APIs RESTful y coordina entre el modelo y la vista.
+- **Vista**: Generada de forma dinámica (HTML, CSS, JS y Bootstrap).
+- **Controlador**: Maneja las solicitudes HTTP y expone APIs RESTful.
 
 ### 2. Sistema de Intervalos Personalizados
 - Configuración de intervalos iniciales en la fase de aprendizaje (15 minutos, 1 día, 3 días).
 - Ajuste dinámico de intervalos en función del rendimiento del usuario.
-- Manejo automático de estados:
-  - **Aprendizaje**: Tarjetas nuevas con intervalos cortos.
-  - **Repaso**: Intervalos crecientes para tarjetas memorizadas.
-  - **Reaprendizaje**: Reinicio del proceso para tarjetas olvidadas.
 
 ### 3. Seguridad
 - Implementación de autenticación y autorización con Spring Security.
 - Cifrado de contraseñas utilizando BCrypt.
-- Validación de entradas para prevenir ataques de SQL Injection y CSRF.
 
 ### 4. Interfaz Dinámica con AJAX
 - Uso de AJAX para actualizar datos en tiempo real sin recargar la página.
-- Respuesta rápida y eficiente para acciones como marcar tarjetas como "Correcta" o "Olvidada".
 
 ### 5. Reportes y Estadísticas
-- Visualización del **progreso diario** y **general**.
-- Clasificación de tarjetas según su estado:
-  - Nuevas (Aprendizaje)
-  - Estudiando (en proceso de repaso)
-  - Reaprendiendo
-- Métricas clave:
-  - Tarjetas repasadas.
-  - Retención de información.
-  - Niveles de dificultad.
+- Métricas clave: tarjetas repasadas, retención de información, niveles de dificultad.
 
 ## Pruebas
 
-Las pruebas se encuentran en la carpeta `tests/`. Para ejecutar las pruebas unitarias, utiliza el siguiente comando:
+Para ejecutar las pruebas unitarias:
 
 ```bash
 mvn test
@@ -97,28 +94,18 @@ mvn test
 
 ## Contribución
 
-¡Las contribuciones son bienvenidas! Para contribuir a MemoCards:
+¡Las contribuciones son bienvenidas! Sigue estos pasos:
 
 1. Haz un **fork** del repositorio.
-2. Crea una rama para tu funcionalidad o corrección:
-
-   ```bash
-   git checkout -b feature/nueva-funcionalidad
-   ```
-
-3. Realiza tus cambios y haz un commit:
-
-   ```bash
-   git commit -m "Añadir nueva funcionalidad X"
-   ```
-
+2. Crea una rama para tu funcionalidad o corrección.
+3. Realiza tus cambios y haz un commit.
 4. Envía un **Pull Request**.
 
 ## Tecnologías Utilizadas
 
-- **Backend**: Java con Spring Boot (Spring Data JPA, Spring Security).
+- **Backend**: Java con Spring Boot.
 - **Base de Datos**: SQL Server.
-- **Frontend**: Handlebars, Bootstrap, HTML, CSS y JavaScript (AJAX).
+- **Frontend**: HTML, CSS, Bootstrap y JavaScript (AJAX).
 
 ## Licencia
 
@@ -126,4 +113,3 @@ Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para má
 
 ---
 
-Desarrollado para mejorar el aprendizaje y optimizar el estudio mediante un enfoque científico y personalizable. ¡Estudia más inteligentemente con MemoCards! 📚
