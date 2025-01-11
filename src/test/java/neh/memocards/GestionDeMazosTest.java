@@ -7,10 +7,6 @@ import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
-import java.util.HashSet;
-import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GestionDeMazosTest {
@@ -19,25 +15,28 @@ public class GestionDeMazosTest {
     private TematicaEstudio tematica;
     private Mazo mazo;
 
+
     @BeforeEach
     void setUp() {
         estudiante = new Estudiante();
         tematica = new TematicaEstudio();
         tematica.setId(1L);
         tematica.setNombre("Matemáticas");
-        tematica.setDescripcion("Temática relacionada con matemáticas");;
+        tematica.setDescripcion("Temática relacionada con matemáticas");
 
         mazo = new Mazo();
         mazo.setId(1L);
         mazo.setNombre("Álgebra");
         mazo.setDescripcion("Mazo sobre álgebra");
+
         estudiante.agregarTematicaDeEstudio(tematica);
+        estudiante.agregarMazoATematica(mazo, tematica.getId());
     }
 
     @Test
     void testCrearLeerActualizarEliminarMazo() {
         // Crear mazo
-        estudiante.agregarMazoATematica(mazo, tematica.getId());
+
         assertTrue(tematica.getMazos().contains(mazo), "El mazo no se agregó correctamente");
 
         // Leer mazo
@@ -57,7 +56,7 @@ public class GestionDeMazosTest {
     @Test
     void testAsociarTarjetasAMazo() {
         // Crear y asociar mazo
-        estudiante.agregarMazoATematica(mazo, tematica.getId());
+
 
         // Crear tarjeta
         MemoCard tarjeta = new MemoCard();
@@ -72,7 +71,7 @@ public class GestionDeMazosTest {
     @Test
     void testCrearLeerActualizarEliminarTarjetaDentroDeUnMazo() {
         // Crear y asociar mazo
-        estudiante.agregarMazoATematica(mazo, tematica.getId());
+
 
         // Crear tarjeta
         MemoCard tarjeta = new MemoCard();
@@ -96,17 +95,17 @@ public class GestionDeMazosTest {
     @Test
     void testEvitarDuplicadosEnNombresDeMazosYContenidoDeTarjetas() {
         // Crear y asociar mazo
-        estudiante.agregarMazoATematica(mazo, tematica.getId());
 
-        // Intentar agregar un mazo con el mismo nombre
-        Mazo mazoDuplicado = new Mazo();
-        mazoDuplicado.setId(2L);
-        mazoDuplicado.setNombre("Álgebra");
+            // Intentar agregar un mazo con el mismo nombre
+            Mazo mazoDuplicado = new Mazo();
+            mazoDuplicado.setId(2L);
+            mazoDuplicado.setNombre("Álgebra");
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            estudiante.agregarMazoATematica(mazoDuplicado, tematica.getId());
-        });
-        assertEquals("No se puede agregar un Mazo sin existe uno con mismo Id o Nombre", exception.getMessage());
+            Exception exception = assertThrows(RuntimeException.class, () -> {
+                estudiante.agregarMazoATematica(mazoDuplicado, tematica.getId());
+            });
+
+        assertEquals("No se puede agregar un Mazo si existe uno con mismo Id o Nombre", exception.getMessage());
 
         // Crear tarjeta
         MemoCard tarjeta = new MemoCard();
