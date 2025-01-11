@@ -39,6 +39,10 @@ MemoCards/
 ├── README.md                     # Documentación principal
 └── .gitignore                    # Archivos y carpetas ignorados por Git
 ```
+## Diagrama de Clases
+![Diagrama de Clases](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/nehuen-b-a/MemoCards/refs/heads/main/documentation/diagrams/DiagramaDeClases.puml)
+
+
 
 ## Instalación
 
