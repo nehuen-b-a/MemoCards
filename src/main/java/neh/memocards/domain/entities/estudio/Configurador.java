@@ -49,7 +49,7 @@ public class Configurador {
                 List.of(15L, 1440L, 4320L),
                 2.5d,
                 1.3d,
-                1.2d,
+                0.8333d,
                 1440L,
                 345600L,
                 8
