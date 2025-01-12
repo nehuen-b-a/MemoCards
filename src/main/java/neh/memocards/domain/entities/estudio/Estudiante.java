@@ -85,6 +85,18 @@ public class Estudiante {
         mazoElegido.agregarMemoCard(memoCard);
     }
 
+    public void eleminarTematica(TematicaEstudio tematica){
+        this.tematicas.remove(tematica);
+    }
+
+    public void eliminarMazo(Mazo mazo, Long idTematica) {
+        this.buscarTematicaPorId(idTematica).agregarMazo(mazo);
+    }
+
+    public void eliminarMemoCard(MemoCard memoCard,Long idMazo, Long idTematica){
+        this.buscarTematicaPorId(idTematica).buscarMazoPorId(idMazo).eliminarMemoCard(memoCard);
+    }
+
 
 
 }

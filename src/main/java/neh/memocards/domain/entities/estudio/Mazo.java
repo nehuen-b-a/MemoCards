@@ -63,4 +63,8 @@ public class Mazo {
         this.tarjetasNoVistas.removeAll(memoCards);
     }
 
+    public void eliminarMemoCard(MemoCard memoCard) {
+        this.tarjetasNoVistas.remove(memoCard);
+        this.tarjetasVistas.remove(memoCard);
+    }
 }
