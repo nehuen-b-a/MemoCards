@@ -5,19 +5,20 @@ import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
 public class Repaso extends EstadoMemoCard {
     // Atributos
-    private Float coeficienteDeRetencion;
-    private Float coeficienteDeBonusPorFacilidad;
-    private Float coeficientePorDificultad;
+    private Double coeficienteDeRetencion;
+    private Double coeficienteDeBonusPorFacilidad;
+    private Double coeficientePorDificultad;
     private Long intervaloMax;
 
     // Métodos
     @Override
-    public void calcularIntervalo(Integer intervalo, Integer dificultad) {
-        // Implementación pendiente
+    public Long calcularIntervalo(Long intervalo, Integer dificultad) {
+
+        return null;
     }
 
     @Override
-    public void actualizarEstado(EstadoMemoCard nuevoEstado) {
+    public void actualizarEstado() {
         // Implementación pendiente
     }
 

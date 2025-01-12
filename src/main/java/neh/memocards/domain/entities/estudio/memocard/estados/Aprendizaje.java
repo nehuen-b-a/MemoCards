@@ -1,6 +1,6 @@
 package neh.memocards.domain.entities.estudio.memocard.estados;
 
-import lombok.AllArgsConstructor;
+
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
 import java.util.List;
@@ -21,17 +21,27 @@ public class Aprendizaje extends EstadoMemoCard {
     }
 
     @Override
-    public void calcularIntervalo(Integer intervalo, Integer dificultad) {
-        this.cantidadDeAciertos =  dificultad <= 2 ? cantidadDeAciertos + 1: 0;
-        if(this.intervalos.get(cantidadDeAciertos) >= intervalos.get(cantidadDeAciertos -1)){
-            super.getMemoCard().cambiarEstado(new Repaso(super.getMemoCard()));
+    public Long calcularIntervalo(Long intervalo, Integer dificultad) {
+        this.cantidadDeAciertos = dificultad <= 2 ? cantidadDeAciertos + 1 : 0;
+        Long intervaloActual = this.intervalos.get(cantidadDeAciertos);
+
+        if (intervaloActual >= intervalos.get(cantidadDeAciertos - 1)) {
+            this.actualizarEstado();
+            Long nuevoIntervalo = super.getMemoCard().getEstadoAprendizaje().calcularIntervalo(intervaloActual, dificultad);
+            this.setIntervaloActual(nuevoIntervalo);
+            return nuevoIntervalo;
+
+        } else {
+            Long nuevoIntervalo = super.bonificarIntervalo(intervaloActual, dificultad);
+            this.setIntervaloActual(nuevoIntervalo);
+            return nuevoIntervalo;
+
         }
     }
 
     @Override
-    public void actualizarEstado(EstadoMemoCard nuevoEstado) {
-        // Implementación pendiente
-    }
+    public void actualizarEstado() {super.getMemoCard().cambiarEstado(new Repaso(super.getMemoCard())); }
+
 
 
 }

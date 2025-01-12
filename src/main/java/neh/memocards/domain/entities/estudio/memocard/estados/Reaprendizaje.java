@@ -12,31 +12,41 @@ public class Reaprendizaje extends EstadoMemoCard {
     private Long intevaloMin;
     private Integer cantidadDeAciertos;
 
+
     // Métodos
     @Override
-    public void calcularIntervalo(Integer intervalo, Integer dificultad) {
-        this.cantidadDeAciertos =  dificultad <= 2 ? cantidadDeAciertos + 1: 0;
-        if(this.intervalos.get(cantidadDeAciertos) >= intervalos.get(cantidadDeAciertos -1)){
-            super.getMemoCard().cambiarEstado(new Repaso(super.getMemoCard()));
+    public Long calcularIntervalo(Long intervalo, Integer dificultad) {
+        this.cantidadDeAciertos = dificultad <= 2 ? cantidadDeAciertos + 1 : 0;
+        Long intervaloActual = this.intervalos.get(cantidadDeAciertos);
+
+        if (intervaloActual >= intervalos.get(cantidadDeAciertos - 1)) {
+            this.actualizarEstado();
+            Long nuevoIntervalo = super.getMemoCard().getEstadoAprendizaje().calcularIntervalo(intervaloActual, dificultad);
+            this.setIntervaloActual(nuevoIntervalo);
+            return nuevoIntervalo;
+
+        } else {
+            Long nuevoIntervalo = super.bonificarIntervalo(intervaloActual, dificultad);
+            this.setIntervaloActual(nuevoIntervalo);
+            return nuevoIntervalo;
+
         }
     }
 
     @Override
-    public void actualizarEstado(EstadoMemoCard nuevoEstado) {
-        // Implementación pendiente
-    }
+    public void actualizarEstado() {super.getMemoCard().cambiarEstado(new Repaso(super.getMemoCard())); }
 
     public Reaprendizaje(MemoCard memoCard) {
         super(memoCard,"REAPRENDIZAJE");
 
         this.intervalos = memoCard.getConfigurador().getIntervaloInicial()
                 .stream()
-                .filter(intervalo -> intervalo >= 1440L)
+                .filter(intervalo -> intervalo >= this.intevaloMin)
                 .collect(Collectors.toList());
 
-        if(intervalos.stream().anyMatch(intervalo -> (intervalo >= 1440L && intervalo <= 2500L ))){
+        if(intervalos.stream().anyMatch(intervalo -> (intervalo >= this.intevaloMin && intervalo <= this.intevaloMin*1.6))){
             List<Long> intervaloAux = new ArrayList<>();
-            intervaloAux.add(1440L);
+            intervaloAux.add(this.intevaloMin);
             intervaloAux.addAll(intervalos);
             this.intervalos = intervaloAux;
         }
