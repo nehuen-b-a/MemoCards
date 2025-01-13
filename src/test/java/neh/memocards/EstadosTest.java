@@ -39,11 +39,11 @@ public class EstadosTest {
         Long intervalo = estado.calcularIntervalo(memoCard.getEstadoAprendizaje().getIntervaloActual(), 2);
         assertEquals(15L, intervalo);
 
-        intervalo = estado.calcularIntervalo(intervalo, 1);
-        assertEquals(1199L, intervalo);
+        intervalo = estado.calcularIntervalo(intervalo, 2);
+        assertEquals(999L, intervalo);
 
-        intervalo = estado.calcularIntervalo(intervalo, 1);
-        assertEquals(3599L, intervalo);
+        intervalo = estado.calcularIntervalo(intervalo, 0);
+        assertEquals(3898L, intervalo);
     }
 
 
