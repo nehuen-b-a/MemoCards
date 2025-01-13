@@ -29,7 +29,6 @@ public class Aprendizaje extends EstadoMemoCard {
             super.setIntervaloActual(intervaloActual);
             this.cantidadDeAciertos = dificultad <= 2 ? cantidadDeAciertos + 1 : 0;
             this.intervalosBonificados= this.intervalosBonificados.stream().map(intervalo -> super.bonificarIntervalo(intervalo, dificultad)).toList();
-            System.out.println("IntervaloT=0: "+ intervalosBonificados);
             return intervaloActual;
         }
 
@@ -40,7 +39,6 @@ public class Aprendizaje extends EstadoMemoCard {
         }
 
         //bonificamos intervalos segun dificultad
-        System.out.println("IntervaloT=1: " + intervalosBonificados);
         this.intervalosBonificados= this.intervalosBonificados.stream().map(intervalo -> super.bonificarIntervalo(intervalo, dificultad)).toList();
         Long intervaloHipotetico = cantidadDeAciertos <= (intervalos.size() - 1)? this.intervalosBonificados.get(cantidadDeAciertos) : intervalosBonificados.get(intervalos.size() - 1);
 
