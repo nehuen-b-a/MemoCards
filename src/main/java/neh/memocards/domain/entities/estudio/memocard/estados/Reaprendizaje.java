@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Reaprendizaje extends EstadoMemoCard {
+
     // Atributos
     private List<Long> intervalos;
     private final Long intevaloMin;
@@ -36,8 +37,14 @@ public class Reaprendizaje extends EstadoMemoCard {
 
     @Override
     public Long calcularIntervalo(Long intervaloAnterior, Integer dificultad) {
+        // En caso de la primera asignacion le damos el minimo
+        if(cantidadDeAciertos == 0){
+            Long intervaloActual = this.intervalos.get(0);
+            super.setIntervaloActual(intervaloActual);
+            cantidadDeAciertos ++;
+            return intervaloActual;
+        }
         // En caso de Mucha dificultad Reseteamos los aciertos y las bonificaciones
-        this.cantidadDeAciertos = dificultad <= 2 ? cantidadDeAciertos + 1 : 0;
         this.intervalosBonificados = dificultad >= 3 ? this.intervalos : this.intervalosBonificados;
 
         //bonificamos intervalos segun dificultad
@@ -49,9 +56,11 @@ public class Reaprendizaje extends EstadoMemoCard {
             this.actualizarEstado();
             Long nuevoIntervalo = super.getMemoCard().getEstadoAprendizaje().calcularIntervalo(intervaloHipotetico, dificultad);
             this.setIntervaloActual(nuevoIntervalo);
+            cantidadDeAciertos ++;
             return nuevoIntervalo;
         } else {
             this.setIntervaloActual(intervaloHipotetico);
+            this.cantidadDeAciertos = dificultad <= 2 ? cantidadDeAciertos + 1 : 0;
             return intervaloHipotetico;
         }
     }
