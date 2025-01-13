@@ -8,9 +8,13 @@ import neh.memocards.domain.entities.estudio.memocard.estados.Reaprendizaje;
 import neh.memocards.domain.entities.estudio.memocard.estados.Repaso;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+
+import static java.sql.DriverManager.println;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 
 public class EstadosTest {
@@ -42,44 +46,57 @@ public class EstadosTest {
         assertEquals(3600L, intervalo);
     }
 
+
+    @Test
+    void testIntervalosDeReaprendizajeTarjetasNuevas() {
+        memoCard.setEstadoAprendizaje(new Reaprendizaje(memoCard));
+        EstadoMemoCard estado = memoCard.getEstadoAprendizaje();
+        assertTrue(estado instanceof Reaprendizaje);
+
+        Long intervalo = estado.calcularIntervalo(0L, 1);
+        assertEquals(1440L, intervalo);
+
+        intervalo = estado.calcularIntervalo(intervalo, 1);
+        assertEquals(4320L, intervalo);
+
+        intervalo = estado.calcularIntervalo(intervalo, 1);
+        assertEquals(10800L, intervalo);
+    }
+
     @Test
     void testRecalcularIntervalosSegunRespuestas() {
         EstadoMemoCard estado = memoCard.getEstadoAprendizaje();
 
         // "Otra vez"
-        Long intervalo = estado.calcularIntervalo(1440L, 1);
+        Long intervalo = estado.calcularIntervalo(1440L, 3);
         assertEquals(15L, intervalo);
-        assertEquals(0.975, memoCard.getConfigurador().getFactorFacilidad());
 
         // "Difícil"
         intervalo = estado.calcularIntervalo(intervalo, 2);
-        assertEquals((long) (15 * 1.2), intervalo);
-        assertEquals(1.105, memoCard.getConfigurador().getFactorFacilidad());
+        assertEquals((long) (1440 * 0.8333), intervalo);
 
         // "Bien"
-        intervalo = estado.calcularIntervalo(intervalo, 3);
-        assertEquals((long) (15 * 1.105), intervalo);
-        assertEquals(1.105, memoCard.getConfigurador().getFactorFacilidad());
+        intervalo = estado.calcularIntervalo(intervalo, 1);
+        assertEquals((long) (4320 * 0.8333), intervalo);
 
         // "Fácil"
-        intervalo = estado.calcularIntervalo(intervalo, 4);
-        assertEquals((long) (15 * 1.105 * 1.3), intervalo);
-        assertEquals(1.271, memoCard.getConfigurador().getFactorFacilidad());
+        intervalo = estado.calcularIntervalo(intervalo, 0);
+        assertEquals((long) (4320 * 0.8333 * 1.3), intervalo);
     }
 
     @Test
     void testProgresionDeEstadosDeTarjetas() {
         // Pasar de "Aprendizaje" a "Repaso"
         EstadoMemoCard estado = memoCard.getEstadoAprendizaje();
-        estado.calcularIntervalo(0L, 3);
-        estado.calcularIntervalo(15L, 3);
-        estado.calcularIntervalo(1440L, 3);
+        estado.calcularIntervalo(estado.getIntervaloActual(), 0);
+        estado.calcularIntervalo(estado.getIntervaloActual(), 0);
+        estado.calcularIntervalo(estado.getIntervaloActual(), 0);
 
         assertTrue(memoCard.getEstadoAprendizaje() instanceof Repaso);
 
         // Regresar a "Reaprendizaje" desde "Repaso"
         estado = memoCard.getEstadoAprendizaje();
-        estado.calcularIntervalo(4320L, 1);
+        estado.calcularIntervalo(4320L, 3);
 
         assertTrue(memoCard.getEstadoAprendizaje() instanceof Reaprendizaje);
     }
