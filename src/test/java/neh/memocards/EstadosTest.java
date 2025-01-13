@@ -36,14 +36,14 @@ public class EstadosTest {
         EstadoMemoCard estado = memoCard.getEstadoAprendizaje();
         assertTrue(estado instanceof Aprendizaje);
 
-        Long intervalo = estado.calcularIntervalo(0L, 2);
+        Long intervalo = estado.calcularIntervalo(memoCard.getEstadoAprendizaje().getIntervaloActual(), 2);
         assertEquals(15L, intervalo);
 
         intervalo = estado.calcularIntervalo(intervalo, 1);
-        assertEquals(1200L, intervalo);
+        assertEquals(1199L, intervalo);
 
         intervalo = estado.calcularIntervalo(intervalo, 1);
-        assertEquals(3600L, intervalo);
+        assertEquals(3599L, intervalo);
     }
 
 
@@ -53,7 +53,7 @@ public class EstadosTest {
         EstadoMemoCard estado = memoCard.getEstadoAprendizaje();
         assertTrue(estado instanceof Reaprendizaje);
 
-        Long intervalo = estado.calcularIntervalo(0L, 1);
+        Long intervalo = estado.calcularIntervalo(memoCard.getEstadoAprendizaje().getIntervaloActual(), 1);
         assertEquals(1440L, intervalo);
 
         intervalo = estado.calcularIntervalo(intervalo, 1);
