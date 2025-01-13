@@ -23,22 +23,43 @@ public class Aprendizaje extends EstadoMemoCard {
 
     @Override
     public Long calcularIntervalo(Long intervaloAnterior, Integer dificultad) {
+        // En caso de la primera asignacion le damos el minimo
+        if (cantidadDeAciertos == 0) {
+            Long intervaloActual = this.intervalos.get(0);
+            super.setIntervaloActual(intervaloActual);
+            this.cantidadDeAciertos = dificultad <= 2 ? cantidadDeAciertos + 1 : 0;
+            this.intervalosBonificados= this.intervalosBonificados.stream().map(intervalo -> super.bonificarIntervalo(intervalo, dificultad)).toList();
+            System.out.println("IntervaloT=0: "+ intervalosBonificados);
+            return intervaloActual;
+        }
+
         // En caso de Mucha dificultad Reseteamos los aciertos y las bonificaciones
-        this.cantidadDeAciertos = dificultad <= 2 ? cantidadDeAciertos + 1 : 0;
-        this.intervalosBonificados = dificultad >= 3 ? this.intervalos: this.intervalosBonificados;
+        if(dificultad >= 3) {
+            this.intervalosBonificados = this.intervalos;
+            this.cantidadDeAciertos = 0;
+        }
 
         //bonificamos intervalos segun dificultad
-        this.intervalosBonificados.forEach(intervalo -> super.bonificarIntervalo(intervalo, dificultad));
+        System.out.println("IntervaloT=1: " + intervalosBonificados);
+        this.intervalosBonificados= this.intervalosBonificados.stream().map(intervalo -> super.bonificarIntervalo(intervalo, dificultad)).toList();
         Long intervaloHipotetico = this.intervalosBonificados.get(cantidadDeAciertos);
+        System.out.println("IntervaloT=2: "
+                + intervalosBonificados);
+
+        System.out.println("IntervaloPrueba1: 1000, Dificultad: 2");
+        System.out.println("IntervaloPrueba1: " +super.bonificarIntervalo(1000L,2) +", Dificultad: 2");
 
         //Nos fijamos si superamos el umbral de Aprendizaje, si pase eso pasamos a Repaso, caso contratio retornamos el intevaloHipotetico
         if (intervaloHipotetico >= intervalos.get(intervalos.size() - 1)) {
             this.actualizarEstado();
             Long nuevoIntervalo = super.getMemoCard().getEstadoAprendizaje().calcularIntervalo(intervaloHipotetico, dificultad);
             this.setIntervaloActual(nuevoIntervalo);
+
             return nuevoIntervalo;
+
         } else {
             this.setIntervaloActual(intervaloHipotetico);
+            this.cantidadDeAciertos ++;
             return intervaloHipotetico;
         }
     }

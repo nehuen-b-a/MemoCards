@@ -44,10 +44,13 @@ public abstract class EstadoMemoCard {
         Double bonificacion;
         switch (dificultad) {
             case 0: bonificacion = this.coeficienteDeBonusPorFacilidad;
+            break;
             case 2: bonificacion = this.coeficientePorDificultad;
+            break;
             default: bonificacion = 1d;
         }
-        return (long) (intervalo * bonificacion);
+        System.out.println("Bonificador resultado: " + (Long)(long) (intervalo * bonificacion)  + ", Dificultad: " + dificultad);
+        return (Long)(long) (intervalo * bonificacion);
     }
 
 
