@@ -34,7 +34,7 @@ public class EstadosTest {
     @Test
     void testIntervalosInicialesTarjetasNuevas() {
         EstadoMemoCard estado = memoCard.getEstadoAprendizaje();
-        assertTrue(estado instanceof Aprendizaje);
+        assertInstanceOf(Aprendizaje.class, estado.getMemoCard().getEstadoAprendizaje());
 
         Long intervalo = estado.calcularIntervalo(memoCard.getEstadoAprendizaje().getIntervaloActual(), 2);
         assertEquals(15L, intervalo);
@@ -44,6 +44,11 @@ public class EstadosTest {
 
         intervalo = estado.calcularIntervalo(intervalo, 0);
         assertEquals(3898L, intervalo);
+
+        intervalo = estado.calcularIntervalo(intervalo, 0);
+        assertEquals(5067L, intervalo);
+        assertInstanceOf(Repaso.class, estado.getMemoCard().getEstadoAprendizaje());
+
     }
 
 
