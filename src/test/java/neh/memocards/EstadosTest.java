@@ -8,6 +8,7 @@ import neh.memocards.domain.entities.estudio.memocard.estados.Reaprendizaje;
 import neh.memocards.domain.entities.estudio.memocard.estados.Repaso;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EstadosTest {
