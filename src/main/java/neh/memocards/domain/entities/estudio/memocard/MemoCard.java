@@ -44,17 +44,26 @@ public class MemoCard {
 
     // Métodos
 
-    public MemoCard(){
+    public MemoCard() {
         historialEstados = new ArrayList<>();
     }
 
     public void cambiarEstado(EstadoMemoCard nuevoEstado) {
-        HistorialEstadoMemoCard nuevoRegistroDeEstado  = new HistorialEstadoMemoCard(this, estadoAprendizaje, nuevoEstado);
+        HistorialEstadoMemoCard nuevoRegistroDeEstado = new HistorialEstadoMemoCard(this, estadoAprendizaje, nuevoEstado);
         historialEstados.add(nuevoRegistroDeEstado);
         estadoAprendizaje = nuevoEstado;
     }
 
 
-    public void reiniciarTarjeta() { Aprendizaje nuevoEstado = new Aprendizaje(this); cambiarEstado(nuevoEstado);}
+    public void actualizarSaguijela() {
+        this.cantidadDeOlvidos = getEstadoAprendizaje().getCantidadDeDesaciertos();
+        this.esSanguijuela = cantidadDeOlvidos >= 8;
+    }
+
+
+    public void reiniciarTarjeta() {
+        Aprendizaje nuevoEstado = new Aprendizaje(this);
+        cambiarEstado(nuevoEstado);
+    }
 }
 

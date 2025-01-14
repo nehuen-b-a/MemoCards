@@ -2,13 +2,12 @@ package neh.memocards.domain.entities.estudio;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.hibernate.annotations.Check;
+
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -33,14 +32,14 @@ public class Configurador {
     // Métodos
 
 
-     public void setIntervaloInicial(List<Long>  intervaloInicial) {
-         if(intervaloInicial == null || intervaloInicial.isEmpty()) {
-             throw new IllegalArgumentException();
-         }
-         this.intervaloInicial = intervaloInicial.stream().sorted((a, b) -> Long.compare(b, a)).collect(Collectors.toList());
-     }
+    public void setIntervaloInicial(List<Long> intervaloInicial) {
+        if (intervaloInicial == null || intervaloInicial.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        this.intervaloInicial = intervaloInicial.stream().sorted((a, b) -> Long.compare(b, a)).collect(Collectors.toList());
+    }
 
-     public void Configurador() {
+    public void Configurador() {
         this.intervaloInicial = new ArrayList<Long>();
     }
 
