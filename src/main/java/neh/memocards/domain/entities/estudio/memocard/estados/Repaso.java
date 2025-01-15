@@ -1,8 +1,11 @@
 package neh.memocards.domain.entities.estudio.memocard.estados;
 
+import lombok.Getter;
 import neh.memocards.domain.entities.estudio.Configurador;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
+
+@Getter
 
 public class Repaso extends EstadoMemoCard {
     // Atributos
@@ -14,7 +17,7 @@ public class Repaso extends EstadoMemoCard {
     public Long calcularIntervalo(Long intervaloAnterior, Integer dificultad) {
         if (dificultad >= 3) {
             this.actualizarEstado();
-            return super.getMemoCard().getEstadoAprendizaje().calcularIntervalo(intervaloAnterior, dificultad);
+            return super.getMemoCard().getEstadoMemoCard().calcularIntervalo(intervaloAnterior, dificultad);
         }
         this.cantidadDeAciertos++;
         this.intervaloActual = (double) (intervaloAnterior) * coeficienteDeRetencion < this.intervaloMax ?
@@ -28,21 +31,19 @@ public class Repaso extends EstadoMemoCard {
         super.getMemoCard().cambiarEstado(new Reaprendizaje(
                 super.getMemoCard(),
                 this.intervaloActual,
-                this.intentos,
                 this.cantidadDeAciertos,
                 this.cantidadDeDesaciertos));
     }
 
     public Repaso(MemoCard memoCard) {
         super(memoCard, "APRENDIZAJE");
-        this.coeficienteDeRetencion = memoCard.getConfigurador().getFactorFacilidad();
+        this.coeficienteDeRetencion = memoCard.getConfigurador().getCoeficienteDeRetencion();
         this.intervaloMax = memoCard.getConfigurador().getIntervaloMaximo();
     }
 
-    public Repaso(MemoCard memoCard, Long intervaloActual, Integer intentos, Integer cantidadDeAciertos, Integer cantidadDeDesaciertos) {
+    public Repaso(MemoCard memoCard, Long intervaloActual, Integer cantidadDeAciertos, Integer cantidadDeDesaciertos) {
         this(memoCard); // Llama al constructor base
         this.intervaloActual = intervaloActual;
-        this.intentos = intentos;
         this.cantidadDeAciertos = cantidadDeAciertos;
         this.cantidadDeDesaciertos = cantidadDeDesaciertos;
     }
@@ -51,7 +52,7 @@ public class Repaso extends EstadoMemoCard {
     public void actualizarConfiguracion() {
         super.actualizarConfiguracion();
         Configurador configurador = this.memoCard.getConfigurador();
-        this.coeficienteDeRetencion = configurador.getFactorFacilidad();
+        this.coeficienteDeRetencion = configurador.getCoeficienteDeRetencion();
         this.intervaloMax = configurador.getIntervaloMaximo();
     }
 

@@ -14,7 +14,6 @@ public abstract class EstadoMemoCard {
     protected MemoCard memoCard;
 
     protected Long intervaloActual;
-    protected Integer intentos;
     protected Integer cantidadDeAciertos;
     protected Integer cantidadDeDesaciertos;
 
@@ -32,13 +31,13 @@ public abstract class EstadoMemoCard {
         this.nombre = nombre;
         this.memoCard = memoCard;
 
-        this.intentos = 0;
+        this.memoCard.setIntentos(0);
         this.cantidadDeDesaciertos = 0;
 
         Configurador configurador = memoCard.getConfigurador();
         this.umbralSanguijuela = configurador.getUmbralSanguijuelas();
         this.coeficienteDeBonusPorFacilidad = configurador.getBonusFacil();
-        this.coeficientePorDificultad = configurador.getIntervaloDificil();
+        this.coeficientePorDificultad = configurador.getBonusDificil();
     }
 
 
@@ -54,7 +53,7 @@ public abstract class EstadoMemoCard {
     public void actualizarConfiguracion() {
         Configurador configurador = memoCard.getConfigurador();
         coeficienteDeBonusPorFacilidad = configurador.getBonusFacil();
-        coeficientePorDificultad = configurador.getIntervaloDificil();
+        coeficientePorDificultad = configurador.getBonusDificil();
         umbralSanguijuela = configurador.getUmbralSanguijuelas();
     }
 

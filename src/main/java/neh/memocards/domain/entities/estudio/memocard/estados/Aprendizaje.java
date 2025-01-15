@@ -1,7 +1,6 @@
 package neh.memocards.domain.entities.estudio.memocard.estados;
 
 import lombok.Getter;
-import lombok.Setter;
 import neh.memocards.domain.entities.estudio.Configurador;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
@@ -28,9 +27,9 @@ public class Aprendizaje extends EstadoMemoCard {
     @Override
     public Long calcularIntervalo(Long intervaloAnterior, Integer dificultad) {
         //Se agrega el intento
-        super.setIntentos(super.getIntentos() + 1);
+        memoCard.setIntentos(memoCard.getIntentos() + 1);
         // En caso de la primera asignacion o mucha dificultad Reseteamos y le damos el minimo
-        if (super.getIntentos() == 1 || dificultad >= 3) {
+        if (memoCard.getIntentos() == 1 || dificultad >= 3) {
             this.intervalosBonificados = this.intervalos;
             this.cantidadDeAciertos = 0;
             cantidadDeDesaciertos = dificultad >= 3 ? cantidadDeDesaciertos + 1 : 0;
@@ -49,16 +48,16 @@ public class Aprendizaje extends EstadoMemoCard {
         this.intervalosBonificados = this.intervalosBonificados.stream().map(intervalo -> super.bonificarIntervalo(intervalo, dificultad)).toList();
 
 
-        //Nos fijamos si superamos el umbral de Aprendizaje, entonces eso pasamos a Repaso, caso contratio retornamos el intevaloHipotetico
+        //Nos fijamos si superamos el umbral de Aprendizaje, entonces pasamos a Repaso, caso contratio retornamos el intevaloHipotetico
         if (cantidadDeAciertos > intervalos.size() - 1) {
             this.actualizarEstado();
-            super.getMemoCard().getEstadoAprendizaje().calcularIntervalo(intervaloAnterior, dificultad);
+            super.getMemoCard().getEstadoMemoCard().calcularIntervalo(intervaloAnterior, dificultad);
             return super.getIntervaloActual();
 
         } else {
             this.intervaloActual = intervalosBonificados.get(cantidadDeAciertos);
+            System.out.println(intervalosBonificados.get(cantidadDeAciertos));
             return super.getIntervaloActual();
-
         }
     }
 
@@ -67,16 +66,15 @@ public class Aprendizaje extends EstadoMemoCard {
 
     public void actualizarEstado() {
         Repaso nuevoEstado = new Repaso(
-                super.getMemoCard(),
+                this.memoCard,
                 this.intervaloActual,
-                this.intentos,
-                this.cantidadDeAciertos,
+                this.cantidadDeAciertos - 1,
                 this.cantidadDeDesaciertos
         );
         super.getMemoCard().cambiarEstado(nuevoEstado);
     }
 
-
+    @Override
     public void actualizarConfiguracion() {
         super.actualizarConfiguracion();
         Configurador configurador = this.memoCard.getConfigurador();

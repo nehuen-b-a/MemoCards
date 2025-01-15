@@ -29,7 +29,7 @@ public class MemoCard {
     @Setter
     private LocalDateTime fechaUltimoRepaso;
     @Setter
-    private EstadoMemoCard estadoAprendizaje;
+    private EstadoMemoCard estadoMemoCard;
     @Setter
     private Configurador configurador;
 
@@ -40,6 +40,8 @@ public class MemoCard {
     @Setter
     private Integer cantidadDeOlvidos;
     @Setter
+    private Integer intentos;
+    @Setter
     private Boolean esSanguijuela;
 
     // Métodos
@@ -49,14 +51,14 @@ public class MemoCard {
     }
 
     public void cambiarEstado(EstadoMemoCard nuevoEstado) {
-        HistorialEstadoMemoCard nuevoRegistroDeEstado = new HistorialEstadoMemoCard(this, estadoAprendizaje, nuevoEstado);
+        HistorialEstadoMemoCard nuevoRegistroDeEstado = new HistorialEstadoMemoCard(this, estadoMemoCard, nuevoEstado);
         historialEstados.add(nuevoRegistroDeEstado);
-        estadoAprendizaje = nuevoEstado;
+        estadoMemoCard = nuevoEstado;
     }
 
 
     public void actualizarSaguijela() {
-        this.cantidadDeOlvidos = getEstadoAprendizaje().getCantidadDeDesaciertos();
+        this.cantidadDeOlvidos = getEstadoMemoCard().getCantidadDeDesaciertos();
         this.esSanguijuela = cantidadDeOlvidos >= 8;
     }
 

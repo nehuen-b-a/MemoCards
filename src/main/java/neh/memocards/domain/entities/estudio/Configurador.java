@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -17,11 +16,13 @@ public class Configurador {
 
     private List<Long> intervaloInicial;
     @Setter
-    private Double factorFacilidad;
+    private Double distanciaPorcentualIntervalo;
+    @Setter
+    private Double coeficienteDeRetencion;
     @Setter
     private Double bonusFacil;
     @Setter
-    private Double intervaloDificil;
+    private Double bonusDificil;
     @Setter
     private Long intervaloMinimo;
     @Setter
@@ -46,6 +47,7 @@ public class Configurador {
     public static Configurador configuradorPredeterminado() {
         return new Configurador(
                 List.of(15L, 1440L, 4320L),
+                1.6,
                 2.5d,
                 1.3d,
                 0.8333d,
