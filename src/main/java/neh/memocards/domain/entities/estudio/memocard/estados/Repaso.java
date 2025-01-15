@@ -14,12 +14,12 @@ public class Repaso extends EstadoMemoCard {
 
     // Métodos
     @Override
-    public Long calcularIntervalo(Long intervaloAnterior, Integer dificultad) {
+    public Long cambiarIntervalo(Long intervaloAnterior, Integer dificultad) {
         if (dificultad >= 3) {
             this.actualizarEstado();
-            return super.getMemoCard().getEstadoMemoCard().calcularIntervalo(intervaloAnterior, dificultad);
+            return super.getMemoCard().getEstadoMemoCard().cambiarIntervalo(intervaloAnterior, dificultad);
         }
-        this.cantidadDeAciertos++;
+        this.rachaAciertos++;
         this.intervaloActual = (double) (intervaloAnterior) * coeficienteDeRetencion < this.intervaloMax ?
                 super.bonificarIntervalo((long) ((double) (intervaloAnterior) * coeficienteDeRetencion), dificultad)
                 : this.intervaloMax;
@@ -27,12 +27,17 @@ public class Repaso extends EstadoMemoCard {
     }
 
     @Override
+    public Long estimarIntervalo(Long intervaloAnterior, Integer dificultad) {
+        return 0L;
+    }
+
+    @Override
     public void actualizarEstado() {
         super.getMemoCard().cambiarEstado(new Reaprendizaje(
                 super.getMemoCard(),
                 this.intervaloActual,
-                this.cantidadDeAciertos,
-                this.cantidadDeDesaciertos));
+                this.rachaAciertos,
+                this.rachaDesaciertos));
     }
 
     public Repaso(MemoCard memoCard) {
@@ -44,8 +49,8 @@ public class Repaso extends EstadoMemoCard {
     public Repaso(MemoCard memoCard, Long intervaloActual, Integer cantidadDeAciertos, Integer cantidadDeDesaciertos) {
         this(memoCard); // Llama al constructor base
         this.intervaloActual = intervaloActual;
-        this.cantidadDeAciertos = cantidadDeAciertos;
-        this.cantidadDeDesaciertos = cantidadDeDesaciertos;
+        this.rachaAciertos = cantidadDeAciertos;
+        this.rachaDesaciertos = cantidadDeDesaciertos;
     }
 
     @Override

@@ -58,7 +58,7 @@ public class MemoCard {
 
 
     public void actualizarSaguijela() {
-        this.cantidadDeOlvidos = getEstadoMemoCard().getCantidadDeDesaciertos();
+        this.cantidadDeOlvidos = getEstadoMemoCard().getRachaDesaciertos();
         this.esSanguijuela = cantidadDeOlvidos >= 8;
     }
 

@@ -13,9 +13,9 @@ public class Reaprendizaje extends EstadoMemoCard {
 
     // Atributos
     private List<Long> intervalos;
+    private List<Long> intervalosBonificados;
     private Double distanciaPorcentualIntervalo;
     private Long intervaloMin;
-    private List<Long> intervalosBonificados;
     private Double bonificacionTotal;
 
 
@@ -43,19 +43,19 @@ public class Reaprendizaje extends EstadoMemoCard {
     public Reaprendizaje(MemoCard memoCard, Long intervaloActual, Integer cantidadDeAciertos, Integer cantidadDeDesaciertos) {
         this(memoCard);
         this.setIntervaloActual(intervaloActual);
-        this.setCantidadDeAciertos(cantidadDeAciertos);
-        this.setCantidadDeDesaciertos(cantidadDeDesaciertos);
+        this.setRachaAciertos(cantidadDeAciertos);
+        this.setRachaDesaciertos(cantidadDeDesaciertos);
     }
 
     @Override
-    public Long calcularIntervalo(Long intervaloAnterior, Integer dificultad) {
+    public Long cambiarIntervalo(Long intervaloAnterior, Integer dificultad) {
         //Se agrega el intento
         memoCard.setIntentos(memoCard.getIntentos() + 1);
         // En caso de mucha dificultad Reseteamos y le damos el minimo
-        if (dificultad >= 3 || cantidadDeAciertos == 0) {
+        if (dificultad >= 3 || rachaAciertos == 0) {
             this.intervalosBonificados = this.intervalos;
-            this.cantidadDeAciertos = dificultad >= 3? 0 : cantidadDeAciertos + 1;
-            cantidadDeDesaciertos = dificultad >= 3? cantidadDeDesaciertos + 1 : cantidadDeDesaciertos;
+            this.rachaAciertos = dificultad >= 3? 0 : rachaAciertos + 1;
+            rachaDesaciertos = dificultad >= 3? rachaDesaciertos + 1 : rachaDesaciertos;
             super.getMemoCard().actualizarSaguijela();
             this.intervaloActual = this.intervalos.get(0);
             this.intervalosBonificados = this.intervalosBonificados.stream().map(intervalo -> super.bonificarIntervalo(intervalo, dificultad)).toList();
@@ -63,8 +63,8 @@ public class Reaprendizaje extends EstadoMemoCard {
             return intervaloActual;
         }
 
-        this.cantidadDeAciertos++;
-        this.cantidadDeDesaciertos = 0;
+        this.rachaAciertos++;
+        this.rachaDesaciertos = 0;
         super.getMemoCard().actualizarSaguijela();
 
         System.out.println(intervalosBonificados);
@@ -75,16 +75,21 @@ public class Reaprendizaje extends EstadoMemoCard {
         System.out.println(intervalosBonificados);
 
         //Nos fijamos si superamos el umbral de Aprendizaje, entonces pasamos a Repaso, caso contratio retornamos el intevaloHipotetico
-        if (cantidadDeAciertos > intervalos.size()) {
+        if (rachaAciertos > intervalos.size()) {
             this.actualizarEstado();
             System.out.println("CAMBIO-DE-ESTADO");
-            super.getMemoCard().getEstadoMemoCard().calcularIntervalo(intervaloAnterior, dificultad);
+            super.getMemoCard().getEstadoMemoCard().cambiarIntervalo(intervaloAnterior, dificultad);
             return memoCard.getEstadoMemoCard().getIntervaloActual();
         } else {
-            this.intervaloActual = intervalosBonificados.get(cantidadDeAciertos-1);
+            this.intervaloActual = intervalosBonificados.get(rachaAciertos -1);
             actualizarBonificacionTotal(dificultad);
             return super.getIntervaloActual();
         }
+    }
+
+    @Override
+    public Long estimarIntervalo(Long intervaloAnterior, Integer dificultad) {
+        return 0L;
     }
 
     @Override
@@ -92,8 +97,8 @@ public class Reaprendizaje extends EstadoMemoCard {
         super.getMemoCard().cambiarEstado(new Repaso(
                 super.getMemoCard(),
                 this.intervaloActual,
-                this.cantidadDeAciertos - 1,
-                this.cantidadDeDesaciertos));
+                this.rachaAciertos - 1,
+                this.rachaDesaciertos));
     }
 
     @Override

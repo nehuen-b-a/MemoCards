@@ -14,8 +14,8 @@ public abstract class EstadoMemoCard {
     protected MemoCard memoCard;
 
     protected Long intervaloActual;
-    protected Integer cantidadDeAciertos;
-    protected Integer cantidadDeDesaciertos;
+    protected Integer rachaAciertos;
+    protected Integer rachaDesaciertos;
 
     private Integer umbralSanguijuela;
     private Double coeficienteDeBonusPorFacilidad;
@@ -23,7 +23,9 @@ public abstract class EstadoMemoCard {
 
 
     // Métodos
-    public abstract Long calcularIntervalo(Long intervaloAnterior, Integer dificultad);
+    public abstract Long cambiarIntervalo(Long intervaloAnterior, Integer dificultad);
+
+    public abstract Long estimarIntervalo(Long intervaloAnterior, Integer dificultad);
 
     public abstract void actualizarEstado();
 
@@ -32,7 +34,7 @@ public abstract class EstadoMemoCard {
         this.memoCard = memoCard;
 
         this.memoCard.setIntentos(0);
-        this.cantidadDeDesaciertos = 0;
+        this.rachaDesaciertos = 0;
 
         Configurador configurador = memoCard.getConfigurador();
         this.umbralSanguijuela = configurador.getUmbralSanguijuelas();
@@ -56,5 +58,6 @@ public abstract class EstadoMemoCard {
         coeficientePorDificultad = configurador.getBonusDificil();
         umbralSanguijuela = configurador.getUmbralSanguijuelas();
     }
+
 
 }
