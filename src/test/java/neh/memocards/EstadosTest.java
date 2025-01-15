@@ -158,4 +158,20 @@ public class EstadosTest {
 
     }
 
+    @Test
+    void testMultiplesDesaciertos() {
+        EstadoMemoCard estado = memoCard.getEstadoMemoCard();
+
+        // Acumulamos errores consecutivos
+        for (int i = 0; i < 5; i++) {
+            estado.cambiarIntervalo(estado.getIntervaloActual(), 3);
+        }
+
+        // Comprobamos que el sistema se recalibra correctamente
+        assertEquals(15L, estado.getIntervaloActual(), "El intervalo debería recalibrarse al mínimo tras varios errores.");
+        assertInstanceOf(Aprendizaje.class, estado, "Debería permanecer en el estado Aprendizaje.");
+    }
+
+
+
 }
