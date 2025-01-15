@@ -20,17 +20,17 @@ public class EstadosTest {
         Configurador configurador = Configurador.configuradorPredeterminado();
         memoCard = new MemoCard();
         memoCard.setConfigurador(configurador);
-        memoCard.setEstadoAprendizaje(new Aprendizaje(memoCard));
+        memoCard.setEstadoMemoCard(new Aprendizaje(memoCard));
         memoCard.setCantidadDeOlvidos(0);
         memoCard.setEsSanguijuela(false);
     }
 
     @Test
     void testIntervalosInicialesTarjetasNuevas() {
-        EstadoMemoCard estado = memoCard.getEstadoAprendizaje();
-        assertInstanceOf(Aprendizaje.class, estado.getMemoCard().getEstadoAprendizaje());
+        EstadoMemoCard estado = memoCard.getEstadoMemoCard();
+        assertInstanceOf(Aprendizaje.class, estado.getMemoCard().getEstadoMemoCard());
 
-        Long intervalo = estado.calcularIntervalo(memoCard.getEstadoAprendizaje().getIntervaloActual(), 2);
+        Long intervalo = estado.calcularIntervalo(memoCard.getEstadoMemoCard().getIntervaloActual(), 2);
         assertEquals(15L, intervalo);
 
         intervalo = estado.calcularIntervalo(intervalo, 2);
@@ -40,9 +40,9 @@ public class EstadosTest {
         assertEquals(3898L, intervalo);
 
         estado.calcularIntervalo(intervalo, 0);
-        assertInstanceOf(Repaso.class, estado.getMemoCard().getEstadoAprendizaje());
+        assertInstanceOf(Repaso.class, estado.getMemoCard().getEstadoMemoCard());
 
-        intervalo = memoCard.getEstadoAprendizaje().getIntervaloActual();
+        intervalo = memoCard.getEstadoMemoCard().getIntervaloActual();
         assertEquals(12668L, intervalo);
 
     }
@@ -50,29 +50,31 @@ public class EstadosTest {
 
     @Test
     void testIntervalosDeReaprendizajeTarjetas() {
-        memoCard.setEstadoAprendizaje(new Reaprendizaje(memoCard));
+        memoCard.setEstadoMemoCard(new Reaprendizaje(memoCard, 9000L, 0, 5));
+        EstadoMemoCard estado = memoCard.getEstadoMemoCard();
 
-        EstadoMemoCard estado = memoCard.getEstadoAprendizaje();
-        assertTrue(estado instanceof Reaprendizaje);
+        assertInstanceOf(Reaprendizaje.class, estado);
 
-        Long intervalo = estado.calcularIntervalo(memoCard.getEstadoAprendizaje().getIntervaloActual(), 1);
+        Long intervalo = estado.calcularIntervalo(memoCard.getEstadoMemoCard().getIntervaloActual(), 1);
+
         assertEquals(1440L, intervalo);
 
-        intervalo = estado.calcularIntervalo(memoCard.getEstadoAprendizaje().getIntervaloActual(), 1);
+        intervalo = estado.calcularIntervalo(memoCard.getEstadoMemoCard().getIntervaloActual(), 1);
+
         assertEquals(4320L, intervalo);
 
-        estado.calcularIntervalo(memoCard.getEstadoAprendizaje().getIntervaloActual(), 1);
-        assertInstanceOf(Repaso.class, estado.getMemoCard().getEstadoAprendizaje());
+        estado.calcularIntervalo(memoCard.getEstadoMemoCard().getIntervaloActual(), 1);
+        assertInstanceOf(Repaso.class, estado.getMemoCard().getEstadoMemoCard());
 
         //cambio de estado
-        intervalo = memoCard.getEstadoAprendizaje().getIntervaloActual();
+        intervalo = memoCard.getEstadoMemoCard().getIntervaloActual();
         assertEquals(10800L, intervalo);
     }
 
     @Test
     void testRecalcularIntervalosSegunRespuestas() {
-        EstadoMemoCard estado = memoCard.getEstadoAprendizaje();
-        estado.setIntentos(5);
+        EstadoMemoCard estado = memoCard.getEstadoMemoCard();
+        memoCard.setIntentos(5);
         // "Otra vez"
         Long intervalo = estado.calcularIntervalo(1440L, 3);
         assertEquals(15L, intervalo);
@@ -88,7 +90,7 @@ public class EstadosTest {
         // "Fácil"
         estado.calcularIntervalo(intervalo, 0);
         //cambio de estado
-        intervalo = memoCard.getEstadoAprendizaje().getIntervaloActual();
+        intervalo = memoCard.getEstadoMemoCard().getIntervaloActual();
 
         assertEquals(11696L, intervalo);
     }
@@ -96,20 +98,20 @@ public class EstadosTest {
     @Test
     void testProgresionDeEstadosDeTarjetas() {
         // Pasar de "Aprendizaje" a "Repaso"
-        EstadoMemoCard estado = memoCard.getEstadoAprendizaje();
-        estado.setIntentos(5);
+        EstadoMemoCard estado = memoCard.getEstadoMemoCard();
+        memoCard.setIntentos(5);
         estado.calcularIntervalo(estado.getIntervaloActual(), 0);
         estado.calcularIntervalo(estado.getIntervaloActual(), 0);
         estado.calcularIntervalo(estado.getIntervaloActual(), 0);
         estado.calcularIntervalo(estado.getIntervaloActual(), 0);
 
-        assertTrue(memoCard.getEstadoAprendizaje() instanceof Repaso);
+        assertTrue(memoCard.getEstadoMemoCard() instanceof Repaso);
 
         // Regresar a "Reaprendizaje" desde "Repaso"
-        estado = memoCard.getEstadoAprendizaje();
+        estado = memoCard.getEstadoMemoCard();
         estado.calcularIntervalo(4320L, 3);
 
-        assertTrue(memoCard.getEstadoAprendizaje() instanceof Reaprendizaje);
+        assertTrue(memoCard.getEstadoMemoCard() instanceof Reaprendizaje);
     }
 
     @Test
@@ -118,8 +120,8 @@ public class EstadosTest {
 
         for (int i = 0; i < 7; i++) {
             memoCard.
-                    getEstadoAprendizaje().
-                    calcularIntervalo(memoCard.getEstadoAprendizaje().
+                    getEstadoMemoCard().
+                    calcularIntervalo(memoCard.getEstadoMemoCard().
                             getIntervaloActual(), 3);
         }
 
@@ -127,8 +129,8 @@ public class EstadosTest {
 
         // Olvidar la tarjeta más de 8 veces
         memoCard.
-                getEstadoAprendizaje().
-                calcularIntervalo(memoCard.getEstadoAprendizaje().
+                getEstadoMemoCard().
+                calcularIntervalo(memoCard.getEstadoMemoCard().
                         getIntervaloActual(), 3);
 
         assertTrue(memoCard.getEsSanguijuela());
@@ -138,21 +140,22 @@ public class EstadosTest {
     void testIntervalosMaximosYMinimos() {
         // Configurar valores extremos en el configurador
         memoCard.getConfigurador().setIntervaloMaximo(20000L);
-        memoCard.getConfigurador().setIntervaloMinimo(10L);
-        memoCard.getEstadoAprendizaje().actualizarConfiguracion();
-
-        EstadoMemoCard estado = memoCard.getEstadoAprendizaje();
-
-        // Probar un intervalo por debajo del mínimo
-        Long intervalo = estado.calcularIntervalo(5L, 2);
-        assertEquals(10L, intervalo, "El intervalo debería ajustarse al mínimo permitido.");
-
-        // Paso a Repaso
-        memoCard.getEstadoAprendizaje().actualizarEstado();
+        memoCard.getEstadoMemoCard().actualizarEstado(); // pasamos a Repaso
+        EstadoMemoCard estado = memoCard.getEstadoMemoCard();
 
         // Probar un intervalo por encima del máximo
-        intervalo = estado.calcularIntervalo(25000L, 0);
+        Long intervalo = estado.calcularIntervalo(25000L, 0);
         assertEquals(20000L, intervalo, "El intervalo debería ajustarse al máximo permitido.");
+
+        estado.calcularIntervalo(25000L, 3);//pasamos a Reaprendizaje
+
+        memoCard.getConfigurador().setIntervaloMinimo(500L);//cambio el intervalo minimo para probar la actualizacion de configuracion
+        memoCard.getEstadoMemoCard().actualizarConfiguracion();
+
+        // Probar un intervalo por debajo del mínimo
+        memoCard.getEstadoMemoCard().calcularIntervalo(5L, 2);
+        assertEquals(416L, ((Reaprendizaje) memoCard.getEstadoMemoCard()).getIntervalosBonificados().get(0), "El intervalo debería ajustarse al mínimo permitido.");
+
     }
 
 }
