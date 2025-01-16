@@ -5,14 +5,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 public class Permiso {
 
-  private Long id;
-  private String nombre;
+    private Long id;
+    private String nombre;
 
-  public Permiso(String nombre) {
-    this.nombre = nombre;
-  }
+    public Permiso(String nombre) {
+        this.nombre = nombre;
+    }
 }

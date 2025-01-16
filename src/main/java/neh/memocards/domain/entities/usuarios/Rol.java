@@ -9,31 +9,29 @@ import java.util.Set;
 
 @Getter
 @NoArgsConstructor
-public class Rol  {
+public class Rol {
 
-  private Long id;
+    private Long id;
 
-  @Setter
+    @Setter
+    private TipoRol tipoRol;
 
-  private TipoRol tipoRol;
+    private Set<Permiso> permisos;
 
+    public Rol(TipoRol tipo) {
+        this.tipoRol = tipo;
+        this.permisos = new HashSet<>();
+    }
 
-  private Set<Permiso> permisos;
+    public boolean tenesPermiso(Permiso permiso) {
+        return permisos.contains(permiso);
+    }
 
-  public Rol(TipoRol tipo) {
-    this.tipoRol = tipo;
-    this.permisos = new HashSet<>();
-  }
+    public void agregarPermiso(Permiso permiso) {
+        permisos.add(permiso);
+    }
 
-  public boolean tenesPermiso(Permiso permiso){
-    return permisos.contains(permiso);
-  }
-
-  public void agregarPermiso(Permiso permiso){
-    permisos.add(permiso);
-  }
-
-  public void quitarPermiso(Permiso permiso){
-    permisos.remove(permiso);
-  }
+    public void quitarPermiso(Permiso permiso) {
+        permisos.remove(permiso);
+    }
 }
