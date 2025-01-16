@@ -35,10 +35,10 @@ public class Aprendizaje extends EstadoMemoCard {
             this.intervalosBonificados = this.intervalos;
             this.rachaAciertos = 0;
             rachaDesaciertos = dificultad >= 3 ? rachaDesaciertos + 1 : 0;
-            super.getMemoCard().actualizarSaguijela();
-            Long intervaloActual = this.intervalos.get(0);
-            this.intervaloActual = intervaloActual;
+            memoCard.actualizarSaguijela();
+            this.intervaloActual = estimarIntervalo(intervaloAnterior, dificultad);
             this.intervalosBonificados = this.intervalosBonificados.stream().map(intervalo -> super.bonificarIntervalo(intervalo, dificultad)).toList();
+            actualizarBonificacionTotal(dificultad);
             return intervaloActual;
         }
 
@@ -57,15 +57,28 @@ public class Aprendizaje extends EstadoMemoCard {
             return memoCard.getEstadoMemoCard().getIntervaloActual();
 
         } else {
-            this.intervaloActual = intervalosBonificados.get(rachaAciertos);
+            this.intervaloActual = estimarIntervalo(intervaloAnterior, dificultad);
             actualizarBonificacionTotal(dificultad);
-            return super.getIntervaloActual();
+            return this.getIntervaloActual();
         }
     }
 
     @Override
     public Long estimarIntervalo(Long intervaloAnterior, Integer dificultad) {
-        return 0L;
+        if (memoCard.getIntentos() == 1 || dificultad >= 3) {
+            return intervalosBonificados.get(0);
+        }
+        if (rachaAciertos > intervalos.size() - 1) {
+            Repaso repaso = new Repaso(
+                    super.getMemoCard(),
+                    this.intervaloActual,
+                    this.rachaAciertos + 1,
+                    this.rachaDesaciertos
+            );
+            return repaso.estimarIntervalo(intervaloAnterior, dificultad);
+        } else {
+            return intervalosBonificados.get(rachaAciertos);
+        }
     }
 
 
@@ -88,8 +101,8 @@ public class Aprendizaje extends EstadoMemoCard {
         intervalosBonificados = intervalos.stream().map(valor -> (long) (valor * bonificacionTotal)).toList();
     }
 
-    private void actualizarBonificacionTotal(Integer dificultad){
-        this.bonificacionTotal *= (double)(super.bonificarIntervalo(100000L,dificultad))/100000d;
+    private void actualizarBonificacionTotal(Integer dificultad) {
+        this.bonificacionTotal *= (double) (super.bonificarIntervalo(100000L, dificultad)) / 100000d;
     }
 
 
