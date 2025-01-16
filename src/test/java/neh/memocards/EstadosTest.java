@@ -173,5 +173,79 @@ public class EstadosTest {
     }
 
 
+    @Test
+    void testCicloDeVidaCompletoDeMemoCard() {
+        // 1. Creamos un configurador
+        Configurador configurador = Configurador.configuradorPredeterminado();
+
+        // 2. Creamos una MemoCard
+        memoCard.setConfigurador(configurador);
+        memoCard.setEstadoMemoCard(new Aprendizaje(memoCard));
+        memoCard.setCantidadDeOlvidos(0);
+        memoCard.setEsSanguijuela(false);
+
+        EstadoMemoCard estado = memoCard.getEstadoMemoCard();
+
+        // 3. Estimamos intervalos iniciales sin cambiar estado
+        Long intervaloEstimado = estado.estimarIntervalo(estado.getIntervaloActual(), 2);
+        Long intervaloCambiado = estado.cambiarIntervalo(estado.getIntervaloActual(), 2);
+        assertEquals(intervaloEstimado, intervaloCambiado, "La estimación y el cambio deben ser iguales.");
+        assertEquals(15L, intervaloEstimado);
+
+        // 4. Se elige una dificultad: Difícil (2)
+        intervaloCambiado = estado.cambiarIntervalo(intervaloCambiado, 2);
+        assertEquals(999L, intervaloCambiado);
+
+        // 5. Se estiman intervalos después de elegir Difícil
+        intervaloEstimado = estado.estimarIntervalo(intervaloCambiado, 2);
+        assertEquals(intervaloEstimado, intervaloCambiado);
+
+        // 6. Se elige Bien (1)
+        intervaloCambiado = estado.cambiarIntervalo(intervaloCambiado, 1);
+        assertEquals(2999L, intervaloCambiado);
+
+        // 7. Se estiman intervalos después de elegir Bien
+        intervaloEstimado = estado.estimarIntervalo(intervaloCambiado, 1);
+        assertEquals(intervaloEstimado, intervaloCambiado);
+
+        // 8. Se elige Fácil y se cambia a Repaso (0)
+        intervaloCambiado = estado.cambiarIntervalo(intervaloCambiado, 0);
+        estado = memoCard.getEstadoMemoCard();
+        assertInstanceOf(Repaso.class, estado, "La tarjeta debería pasar al estado Repaso.");
+        assertEquals(9746L, intervaloCambiado);
+
+        // 9. Se estiman intervalos después de elegir Dificil
+        Long intervaloAnterior = intervaloCambiado;
+        intervaloEstimado = estado.estimarIntervalo(intervaloCambiado, 2);
+        intervaloCambiado = estado.cambiarIntervalo(intervaloAnterior, 2);
+        assertEquals(intervaloEstimado, intervaloCambiado);
+
+        // 10. Validación del cálculo en Repaso: intervaloAnterior * bonificación * 2.5
+        Long intervaloEsperado = Math.round(intervaloAnterior * configurador.getBonusDificil() * configurador.getCoeficienteDeRetencion());
+        assertEquals(intervaloEsperado, intervaloCambiado);
+
+        // 11. La tarjeta debería haberse mantenido estado "Repaso" apesar de varios intentos acertados
+        estado.cambiarIntervalo(intervaloCambiado, 0); // Cambio a Repaso
+        assertInstanceOf(Repaso.class, memoCard.getEstadoMemoCard(), "La tarjeta debería haberse mantenido estado Repaso.");
+
+        // 12. Cambio de estado a "Reaprendizaje" tras un Olvido (3)
+        estado.cambiarIntervalo(intervaloCambiado, 3);
+        assertInstanceOf(Reaprendizaje.class, memoCard.getEstadoMemoCard(), "La tarjeta debería regresar al estado Reaprendizaje.");
+
+        // 13. Validación del intervalo en Reaprendizaje
+        estado = memoCard.getEstadoMemoCard();
+        intervaloEstimado = estado.estimarIntervalo(estado.getIntervaloActual(), 1);
+        intervaloCambiado = estado.cambiarIntervalo(estado.getIntervaloActual(), 1);
+        assertEquals(intervaloEstimado, intervaloCambiado);
+        assertEquals(1440L, intervaloCambiado);
+
+        // 14. Progresión dentro de Reaprendizaje
+        intervaloCambiado = estado.cambiarIntervalo(intervaloCambiado, 1);
+        assertEquals(4320L, intervaloCambiado);
+
+        // 15. Transición de Reaprendizaje a Repaso
+        estado.cambiarIntervalo(intervaloCambiado, 1);
+        assertInstanceOf(Repaso.class, memoCard.getEstadoMemoCard(), "La tarjeta debería pasar al estado Repaso.");
+    }
 
 }
