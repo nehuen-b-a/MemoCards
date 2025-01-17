@@ -2,6 +2,7 @@ package neh.memocards.domain.entities.estudio.memocard.estados;
 
 import lombok.Getter;
 import neh.memocards.domain.entities.estudio.Configurador;
+import neh.memocards.domain.entities.estudio.memocard.Dificultad;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
 
@@ -14,8 +15,8 @@ public class Repaso extends EstadoMemoCard {
 
     // Métodos
     @Override
-    public Long cambiarIntervalo(Long intervaloAnterior, Integer dificultad) {
-        if (dificultad >= 3) {
+    public Long cambiarIntervalo(Long intervaloAnterior, Dificultad dificultad) {
+        if (dificultad == Dificultad.OLVIDO) {
             this.rachaAciertos = 0;
             this.actualizarEstado();
             return super.getMemoCard().getEstadoMemoCard().cambiarIntervalo(intervaloAnterior, dificultad);
@@ -26,8 +27,8 @@ public class Repaso extends EstadoMemoCard {
     }
 
     @Override
-    public Long estimarIntervalo(Long intervaloAnterior, Integer dificultad) {
-        if (dificultad >= 3) {
+    public Long estimarIntervalo(Long intervaloAnterior, Dificultad dificultad) {
+        if (dificultad == Dificultad.OLVIDO) {
             Reaprendizaje reaprendizaje = (new Reaprendizaje(
                     super.getMemoCard(),
                     this.intervaloActual,

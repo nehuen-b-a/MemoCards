@@ -2,6 +2,7 @@ package neh.memocards.domain.entities.estudio.memocard.estados;
 
 import lombok.Getter;
 import neh.memocards.domain.entities.estudio.Configurador;
+import neh.memocards.domain.entities.estudio.memocard.Dificultad;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
 import java.util.List;
@@ -27,14 +28,14 @@ public class Aprendizaje extends EstadoMemoCard {
     }
 
     @Override
-    public Long cambiarIntervalo(Long intervaloAnterior, Integer dificultad) {
+    public Long cambiarIntervalo(Long intervaloAnterior, Dificultad dificultad) {
         //Se agrega el intento
         memoCard.setIntentos(memoCard.getIntentos() + 1);
         // En caso de la primera asignacion o mucha dificultad Reseteamos y le damos el minimo
-        if (memoCard.getIntentos() == 1 || dificultad >= 3) {
+        if (memoCard.getIntentos() == 1 || dificultad == Dificultad.OLVIDO) {
             this.intervalosBonificados = this.intervalos;
             this.rachaAciertos = 0;
-            rachaDesaciertos = dificultad >= 3 ? rachaDesaciertos + 1 : 0;
+            rachaDesaciertos = dificultad == Dificultad.OLVIDO ? rachaDesaciertos + 1 : 0;
             memoCard.actualizarSaguijela();
             this.intervaloActual = estimarIntervalo(intervaloAnterior, dificultad);
             this.intervalosBonificados = this.intervalosBonificados.stream().map(intervalo -> super.bonificarIntervalo(intervalo, dificultad)).toList();
@@ -64,8 +65,8 @@ public class Aprendizaje extends EstadoMemoCard {
     }
 
     @Override
-    public Long estimarIntervalo(Long intervaloAnterior, Integer dificultad) {
-        if (memoCard.getIntentos() == 1 || dificultad >= 3) {
+    public Long estimarIntervalo(Long intervaloAnterior, Dificultad dificultad) {
+        if (memoCard.getIntentos() == 1 || dificultad == Dificultad.OLVIDO) {
             return intervalosBonificados.get(0);
         }
         if (rachaAciertos > intervalos.size() - 1) {
@@ -101,7 +102,7 @@ public class Aprendizaje extends EstadoMemoCard {
         intervalosBonificados = intervalos.stream().map(valor -> (long) (valor * bonificacionTotal)).toList();
     }
 
-    private void actualizarBonificacionTotal(Integer dificultad) {
+    private void actualizarBonificacionTotal(Dificultad dificultad) {
         this.bonificacionTotal *= (double) (super.bonificarIntervalo(100000L, dificultad)) / 100000d;
     }
 

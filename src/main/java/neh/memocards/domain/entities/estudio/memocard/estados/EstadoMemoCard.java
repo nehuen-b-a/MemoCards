@@ -3,6 +3,7 @@ package neh.memocards.domain.entities.estudio.memocard.estados;
 import lombok.Getter;
 import lombok.Setter;
 import neh.memocards.domain.entities.estudio.Configurador;
+import neh.memocards.domain.entities.estudio.memocard.Dificultad;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
 @Setter
@@ -23,9 +24,9 @@ public abstract class EstadoMemoCard {
 
 
     // Métodos
-    public abstract Long cambiarIntervalo(Long intervaloAnterior, Integer dificultad);
+    public abstract Long cambiarIntervalo(Long intervaloAnterior, Dificultad dificultad);
 
-    public abstract Long estimarIntervalo(Long intervaloAnterior, Integer dificultad);
+    public abstract Long estimarIntervalo(Long intervaloAnterior, Dificultad dificultad);
 
     public abstract void actualizarEstado();
 
@@ -43,10 +44,10 @@ public abstract class EstadoMemoCard {
     }
 
 
-    protected Long bonificarIntervalo(Long intervalo, Integer dificultad) {
+    protected Long bonificarIntervalo(Long intervalo, Dificultad dificultad) {
         Double bonificacion = switch (dificultad) {
-            case 0 -> this.coeficienteDeBonusPorFacilidad;
-            case 2 -> this.coeficientePorDificultad;
+            case FACIL -> this.coeficienteDeBonusPorFacilidad;
+            case DIFICIL -> this.coeficientePorDificultad;
             default -> 1d;
         };
         return (Long) (long) (intervalo * bonificacion);

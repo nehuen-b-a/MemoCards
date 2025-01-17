@@ -2,6 +2,7 @@ package neh.memocards.domain.entities.estudio.memocard.estados;
 
 import lombok.Getter;
 import neh.memocards.domain.entities.estudio.Configurador;
+import neh.memocards.domain.entities.estudio.memocard.Dificultad;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
 import java.util.ArrayList;
@@ -44,14 +45,14 @@ public class Reaprendizaje extends EstadoMemoCard {
     }
 
     @Override
-    public Long cambiarIntervalo(Long intervaloAnterior, Integer dificultad) {
+    public Long cambiarIntervalo(Long intervaloAnterior, Dificultad dificultad) {
         //Se agrega el intento
         memoCard.setIntentos(memoCard.getIntentos() + 1);
         // En caso de mucha dificultad Reseteamos y le damos el minimo
-        if (dificultad >= 3 || rachaAciertos == 0) {
+        if (dificultad == Dificultad.OLVIDO || rachaAciertos == 0) {
             this.intervalosBonificados = this.intervalos;
-            this.rachaAciertos = dificultad >= 3 ? 0 : rachaAciertos + 1;
-            rachaDesaciertos = dificultad >= 3 ? rachaDesaciertos + 1 : rachaDesaciertos;
+            this.rachaAciertos = dificultad == Dificultad.OLVIDO ? 0 : rachaAciertos + 1;
+            rachaDesaciertos = dificultad == Dificultad.OLVIDO ? rachaDesaciertos + 1 : rachaDesaciertos;
             super.getMemoCard().actualizarSaguijela();
             this.intervaloActual = estimarIntervalo(intervaloAnterior, dificultad);
             this.intervalosBonificados = this.intervalosBonificados.stream().map(intervalo -> super.bonificarIntervalo(intervalo, dificultad)).toList();
@@ -79,8 +80,8 @@ public class Reaprendizaje extends EstadoMemoCard {
     }
 
     @Override
-    public Long estimarIntervalo(Long intervaloAnterior, Integer dificultad) {
-        if (dificultad >= 3 || rachaAciertos == 0) {
+    public Long estimarIntervalo(Long intervaloAnterior, Dificultad dificultad) {
+        if (dificultad == Dificultad.OLVIDO || rachaAciertos == 0) {
             return intervalosBonificados.get(0);
         }
         if (rachaAciertos > intervalos.size()) {
@@ -128,7 +129,7 @@ public class Reaprendizaje extends EstadoMemoCard {
         intervalosBonificados = intervalos.stream().map(intv -> (long) (intv * bonificacionTotal)).toList();
     }
 
-    private void actualizarBonificacionTotal(Integer dificultad) {
+    private void actualizarBonificacionTotal(Dificultad dificultad) {
         this.bonificacionTotal *= (double) (super.bonificarIntervalo(100000L, dificultad)) / 100000d;
     }
 

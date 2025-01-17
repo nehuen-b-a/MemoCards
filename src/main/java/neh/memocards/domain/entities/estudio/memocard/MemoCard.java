@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import neh.memocards.domain.entities.estudio.Configurador;
+import neh.memocards.domain.entities.estudio.SesionDeEstudio;
 import neh.memocards.domain.entities.estudio.memocard.estados.Aprendizaje;
 import neh.memocards.domain.entities.estudio.memocard.estados.EstadoMemoCard;
 import neh.memocards.domain.entities.estudio.memocard.estados.HistorialEstadoMemoCard;
@@ -43,6 +44,8 @@ public class MemoCard {
     private Integer intentos;
     @Setter
     private Boolean esSanguijuela;
+    @Setter
+    private SesionDeEstudio sesionDeEstudioActual;
 
     // Métodos
 
@@ -64,6 +67,10 @@ public class MemoCard {
 
 
     public void reiniciarTarjeta() {
+        this.intervaloMinutos = 0L;
+        this.cantidadDeOlvidos = 0;
+        this.intentos = 0;
+        this.esSanguijuela = false;
         Aprendizaje nuevoEstado = new Aprendizaje(this);
         cambiarEstado(nuevoEstado);
     }
