@@ -21,12 +21,9 @@ public class Mazo {
 
     private Set<MemoCard> tarjetasVistas;
 
-    private List<SesionDeEstudio> historialDeEstudio;
-
     // Métodos
 
     public Mazo() {
-        historialDeEstudio = new ArrayList<>();
         tarjetasNoVistas = new HashSet<>();
         tarjetasVistas = new HashSet<>();
     }

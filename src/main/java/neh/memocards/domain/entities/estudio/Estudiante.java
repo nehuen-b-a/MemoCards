@@ -26,11 +26,13 @@ public class Estudiante {
     private String apellido;
     private Set<TematicaEstudio> tematicas;
     private List<Configurador> preferencias;
+    private List<SesionDeEstudio> historialDeEstudio;
 
     // Metodos
     public Estudiante (){
         tematicas = new HashSet<TematicaEstudio>();
         preferencias = new ArrayList<>();
+        historialDeEstudio = new ArrayList<>();
     }
 
     public void agregarTematicaDeEstudio(TematicaEstudio tematica) {
