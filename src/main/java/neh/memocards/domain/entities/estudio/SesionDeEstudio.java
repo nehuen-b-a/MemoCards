@@ -64,20 +64,22 @@ public class SesionDeEstudio {
     }
 
     public void finalizarSesion() {
+        if (this.fechaInicio == null) {
+            throw new NullPointerException();
+        }
         this.fechaFin = LocalDateTime.now();
         this.estaFinalizada = true;
 
+        // Calculo el tiempo total de estudio
 
-        if (this.fechaInicio != null && this.fechaFin != null) {
-            this.tiempoEstudio = java.time.Duration.between(this.fechaInicio, this.fechaFin).toSeconds();
-        }
+        this.tiempoEstudio = java.time.Duration.between(this.fechaInicio, this.fechaFin).toSeconds();
 
-
+        // Finalizo sesión para todas las MemoCards
         memoCardsRevisadas.forEach(memo -> memo.setSesionDeEstudioActual(null));
     }
 
     public void registrarMetrica(MemoCard memoCard, Dificultad dificultad) {
-
+        // Registro la MemoCard en las revisadas y aumento Aciertos o Desaciertos
         this.memoCardsRevisadas.add(memoCard);
 
         switch (dificultad) {
