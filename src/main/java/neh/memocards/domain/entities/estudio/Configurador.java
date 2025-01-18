@@ -29,6 +29,12 @@ public class Configurador {
     private Long intervaloMaximo;
     @Setter
     private Integer umbralSanguijuelas;
+    @Setter
+    private Integer maximoDeNuevasCartas;
+    @Setter
+    private Integer maximoDeCartasARepasar;
+
+
 
     // Métodos
 
@@ -53,7 +59,9 @@ public class Configurador {
                 0.8333d,
                 1440L,
                 345600L,
-                8
+                8,
+                10,
+                20
         );
     }
 
