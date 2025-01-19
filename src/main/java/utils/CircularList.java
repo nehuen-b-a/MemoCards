@@ -1,6 +1,5 @@
 package utils;
 
-import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -88,5 +87,13 @@ public class CircularList<T> {
     public void clear() {
         elements.clear();
         currentIndex = 0;
+    }
+
+    public T get(int i) {
+        return elements.get(i);
+    }
+
+    public T remove(int i) {
+        return elements.remove(i);
     }
 }

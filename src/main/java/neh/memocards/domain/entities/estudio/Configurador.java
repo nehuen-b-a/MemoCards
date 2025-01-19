@@ -2,7 +2,10 @@ package neh.memocards.domain.entities.estudio;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import neh.memocards.domain.entities.estudio.memocard.barajador.ITipoDeBarajador;
+import neh.memocards.domain.entities.estudio.memocard.barajador.IntervaloMenorAMayor;
 
 
 import java.util.ArrayList;
@@ -11,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Configurador {
     // Atributos
 
@@ -33,21 +37,18 @@ public class Configurador {
     private Integer maximoDeNuevasCartas;
     @Setter
     private Integer maximoDeCartasARepasar;
+    @Setter
+    private ITipoDeBarajador barajador;
 
 
 
     // Métodos
-
 
     public void setIntervaloInicial(List<Long> intervaloInicial) {
         if (intervaloInicial == null || intervaloInicial.isEmpty()) {
             throw new IllegalArgumentException();
         }
         this.intervaloInicial = intervaloInicial.stream().sorted((a, b) -> Long.compare(b, a)).collect(Collectors.toList());
-    }
-
-    public void Configurador() {
-        this.intervaloInicial = new ArrayList<Long>();
     }
 
     public static Configurador configuradorPredeterminado() {
@@ -61,7 +62,8 @@ public class Configurador {
                 345600L,
                 8,
                 10,
-                20
+                20,
+                new IntervaloMenorAMayor()
         );
     }
 
