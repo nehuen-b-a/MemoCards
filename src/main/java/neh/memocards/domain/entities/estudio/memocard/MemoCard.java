@@ -74,5 +74,10 @@ public class MemoCard {
         Aprendizaje nuevoEstado = new Aprendizaje(this);
         cambiarEstado(nuevoEstado);
     }
+
+    public Boolean estaListaParaRepasar(){
+        var ultimoRepaso = this.fechaUltimoRepaso;
+        return ultimoRepaso.plusMinutes(intervaloMinutos).isAfter(LocalDateTime.now());
+    }
 }
 
