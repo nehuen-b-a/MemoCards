@@ -19,6 +19,7 @@ public class SesionDeEstudio {
     Mazo mazo;
     @Setter
     Long tiempoEstudio;
+    Set<MemoCard> memoCardsPorRevisar;
     Set<MemoCard> memoCardsRevisadas;
     @Setter
     Integer cantidadTotalIntentos;
@@ -52,10 +53,12 @@ public class SesionDeEstudio {
         this.fechaFin = null;
         this.estaFinalizada = false;
     }
-    public SesionDeEstudio(List<MemoCard> memoCardsArevisar,Estudiante estudiante, Mazo mazo) {
+
+    public SesionDeEstudio(Set<MemoCard> memoCardsPorRevisar, Estudiante estudiante, Mazo mazo) {
         new SesionDeEstudio();
         this.estudiante = estudiante;
         this.mazo = mazo;
+        this.memoCardsPorRevisar = memoCardsPorRevisar;
     }
 
     public void comenzarSesion() {
@@ -88,18 +91,26 @@ public class SesionDeEstudio {
                 break;
             case DIFICIL:
                 this.cantidadTotalDificil++;
-                this.cantidadTotalAciertos++;
+                revisarMemoCard(memoCard);
                 break;
             case BIEN:
                 this.cantidadTotalBien++;
-                this.cantidadTotalAciertos++;
+                revisarMemoCard(memoCard);
                 break;
             case FACIL:
                 this.cantidadTotalFacil++;
-                this.cantidadTotalAciertos++;
+                revisarMemoCard(memoCard);
                 break;
             default:
                 throw new IllegalArgumentException("Dificultad no válida: " + dificultad);
+        }
+    }
+
+    private void revisarMemoCard(MemoCard memoCard) {
+        this.cantidadTotalAciertos++;
+        if(memoCard.getIntervaloMinutos() >= mazo.getPreferencia().getIntervaloMaximoARevisarEnUnaSesion()) {
+            memoCardsRevisadas.add(memoCard);
+            memoCardsPorRevisar.remove(memoCard);
         }
     }
 
