@@ -83,7 +83,6 @@ public class SesionDeEstudio {
 
     public void registrarMetrica(MemoCard memoCard, Dificultad dificultad) {
         // Registro la MemoCard en las revisadas y aumento Aciertos o Desaciertos
-        this.memoCardsRevisadas.add(memoCard);
 
         switch (dificultad) {
             case OLVIDO:

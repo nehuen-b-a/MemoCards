@@ -19,10 +19,12 @@ public class Repaso extends EstadoMemoCard {
         if (dificultad == Dificultad.OLVIDO) {
             this.rachaAciertos = 0;
             this.actualizarEstado();
+            memoCard.getSesionDeEstudioActual().registrarMetrica(memoCard,dificultad);
             return super.getMemoCard().getEstadoMemoCard().cambiarIntervalo(intervaloAnterior, dificultad);
         }
         this.rachaAciertos++;
         this.intervaloActual = this.estimarIntervalo(intervaloAnterior, dificultad);
+        memoCard.getSesionDeEstudioActual().registrarMetrica(memoCard,dificultad);
         return intervaloActual;
     }
 
