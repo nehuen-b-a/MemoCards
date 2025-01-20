@@ -3,9 +3,11 @@ package neh.memocards.domain.entities.estudio;
 import lombok.Getter;
 import lombok.Setter;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
+import neh.memocards.domain.entities.estudio.memocard.barajador.ITipoDeBarajador;
 import utils.CircularList;
 
 import java.util.*;
+
 @Getter
 public class Mazo {
     // Atributos
@@ -32,15 +34,12 @@ public class Mazo {
         memoCardsEnRepasoActivo = new CircularList<>();
     }
 
-    public void iniciarSesionDeEstudio() {
-        // Implementación pendiente
-    }
 
-    public void agregarMemoCard(MemoCard ... memoCard) {
+    public void agregarMemoCard(MemoCard... memoCard) {
         this.memoCardsNoVistas.addAll(Arrays.asList(memoCard));
     }
 
-    public Boolean laMemoCardEsExistente (MemoCard memoCard) {
+    public Boolean laMemoCardEsExistente(MemoCard memoCard) {
         return (this.buscarMemoCardPorId(memoCard.getId()) != null) || (this.buscarMemoCardPorNombre(memoCard.getNombre()) != null);
     }
 
@@ -49,6 +48,7 @@ public class Mazo {
         todasMemoCards.addAll(memoCardsVistas);
         return todasMemoCards.stream().filter(memoCard -> memoCard.getNombre().equals(nombreBuscado)).findFirst().orElse(null);
     }
+
     private MemoCard buscarMemoCardPorId(Long id) {
         Set<MemoCard> todasMemoCards = new HashSet<>(this.memoCardsNoVistas); // Copia el primer conjunto
         todasMemoCards.addAll(memoCardsVistas);
@@ -59,6 +59,7 @@ public class Mazo {
         this.memoCardsVistas.add(memoCard);
         this.memoCardsNoVistas.remove(memoCard);
     }
+
     public void marcarTarjetaComoVista(Collection<MemoCard> memoCards) {
         this.memoCardsVistas.addAll(memoCards);
         this.memoCardsNoVistas.removeAll(memoCards);
@@ -67,5 +68,15 @@ public class Mazo {
     public void eliminarMemoCard(MemoCard memoCard) {
         this.memoCardsNoVistas.remove(memoCard);
         this.memoCardsVistas.remove(memoCard);
+    }
+
+    public Set<MemoCard> memoCardsPorRevisar() {
+        var barajador = preferencia.getBarajador();
+        var nuevasMemocardsPorRepasar = memoCardsNoVistas.stream().toList().subList(0,preferencia.getMaximoDeNuevasCartas());
+            nuevasMemocardsPorRepasar.forEach(memoCardsNoVistas::remove);
+            memoCardsVistas.addAll(memoCardsNoVistas);
+        var memoCardsVistasPorRevisar = memoCardsNoVistas.stream().toList().subList(0,preferencia.getMaximoDeCartasARepasar());
+
+        return new HashSet<>(barajador.barajarComienzoDeSesion(nuevasMemocardsPorRepasar,memoCardsVistasPorRevisar).getElements());
     }
 }
