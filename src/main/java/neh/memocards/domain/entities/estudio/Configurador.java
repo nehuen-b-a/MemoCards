@@ -38,7 +38,10 @@ public class Configurador {
     @Setter
     private Integer maximoDeCartasARepasar;
     @Setter
+    private Long intervaloMaximoARevisarEnUnaSesion;
+    @Setter
     private ITipoDeBarajador barajador;
+
 
 
 
@@ -63,6 +66,7 @@ public class Configurador {
                 8,
                 10,
                 20,
+                120L,
                 new IntervaloMenorAMayor()
         );
     }
