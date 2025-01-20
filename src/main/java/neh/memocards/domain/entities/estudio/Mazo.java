@@ -22,7 +22,7 @@ public class Mazo {
 
     private Set<MemoCard> memoCardsVistas;
 
-    private CircularList<MemoCard> a;
+    private CircularList<MemoCard> memoCardsEnRepasoActivo;
 
     // Métodos
 
