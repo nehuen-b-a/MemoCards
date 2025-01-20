@@ -29,6 +29,7 @@ public class Mazo {
     public Mazo() {
         memoCardsNoVistas = new HashSet<>();
         memoCardsVistas = new HashSet<>();
+        memoCardsEnRepasoActivo = new CircularList<>();
     }
 
     public void iniciarSesionDeEstudio() {
