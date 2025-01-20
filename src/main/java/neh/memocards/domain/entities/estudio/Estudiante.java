@@ -21,9 +21,9 @@ public class Estudiante {
     @Setter
     private String nombre;
     @Setter
-    private Usuario usuario;
-    @Setter
     private String apellido;
+    @Setter
+    private Usuario usuario;
     private Set<TematicaEstudio> tematicas;
     private List<Configurador> preferencias;
     private List<SesionDeEstudio> historialDeEstudio;

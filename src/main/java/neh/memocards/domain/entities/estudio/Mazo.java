@@ -3,6 +3,7 @@ package neh.memocards.domain.entities.estudio;
 import lombok.Getter;
 import lombok.Setter;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
+import utils.CircularList;
 
 import java.util.*;
 @Getter
@@ -17,15 +18,17 @@ public class Mazo {
     @Setter
     private Configurador preferencia;
 
-    private Set<MemoCard> tarjetasNoVistas;
+    private Set<MemoCard> memoCardsNoVistas;
 
-    private Set<MemoCard> tarjetasVistas;
+    private Set<MemoCard> memoCardsVistas;
+
+    private CircularList<MemoCard> a;
 
     // Métodos
 
     public Mazo() {
-        tarjetasNoVistas = new HashSet<>();
-        tarjetasVistas = new HashSet<>();
+        memoCardsNoVistas = new HashSet<>();
+        memoCardsVistas = new HashSet<>();
     }
 
     public void iniciarSesionDeEstudio() {
@@ -33,7 +36,7 @@ public class Mazo {
     }
 
     public void agregarMemoCard(MemoCard ... memoCard) {
-        this.tarjetasNoVistas.addAll(Arrays.asList(memoCard));
+        this.memoCardsNoVistas.addAll(Arrays.asList(memoCard));
     }
 
     public Boolean laMemoCardEsExistente (MemoCard memoCard) {
@@ -41,27 +44,27 @@ public class Mazo {
     }
 
     private MemoCard buscarMemoCardPorNombre(String nombreBuscado) {
-        Set<MemoCard> todasMemoCards = new HashSet<>(this.tarjetasNoVistas); // Copia el primer conjunto
-        todasMemoCards.addAll(tarjetasVistas);
+        Set<MemoCard> todasMemoCards = new HashSet<>(this.memoCardsNoVistas); // Copia el primer conjunto
+        todasMemoCards.addAll(memoCardsVistas);
         return todasMemoCards.stream().filter(memoCard -> memoCard.getNombre().equals(nombreBuscado)).findFirst().orElse(null);
     }
     private MemoCard buscarMemoCardPorId(Long id) {
-        Set<MemoCard> todasMemoCards = new HashSet<>(this.tarjetasNoVistas); // Copia el primer conjunto
-        todasMemoCards.addAll(tarjetasVistas);
+        Set<MemoCard> todasMemoCards = new HashSet<>(this.memoCardsNoVistas); // Copia el primer conjunto
+        todasMemoCards.addAll(memoCardsVistas);
         return todasMemoCards.stream().filter(memoCard -> memoCard.getId().equals(id)).findFirst().orElse(null);
     }
 
     public void marcarTarjetaComoVista(MemoCard memoCard) {
-        this.tarjetasVistas.add(memoCard);
-        this.tarjetasNoVistas.remove(memoCard);
+        this.memoCardsVistas.add(memoCard);
+        this.memoCardsNoVistas.remove(memoCard);
     }
     public void marcarTarjetaComoVista(Collection<MemoCard> memoCards) {
-        this.tarjetasVistas.addAll(memoCards);
-        this.tarjetasNoVistas.removeAll(memoCards);
+        this.memoCardsVistas.addAll(memoCards);
+        this.memoCardsNoVistas.removeAll(memoCards);
     }
 
     public void eliminarMemoCard(MemoCard memoCard) {
-        this.tarjetasNoVistas.remove(memoCard);
-        this.tarjetasVistas.remove(memoCard);
+        this.memoCardsNoVistas.remove(memoCard);
+        this.memoCardsVistas.remove(memoCard);
     }
 }

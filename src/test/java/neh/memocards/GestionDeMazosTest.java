@@ -65,7 +65,7 @@ public class GestionDeMazosTest {
         mazo.agregarMemoCard(tarjeta);
 
         // Verificar asociación
-        assertTrue(mazo.getTarjetasNoVistas().contains(tarjeta), "La tarjeta no se agregó al mazo correctamente");
+        assertTrue(mazo.getMemoCardsNoVistas().contains(tarjeta), "La tarjeta no se agregó al mazo correctamente");
     }
 
     @Test
@@ -80,7 +80,7 @@ public class GestionDeMazosTest {
         mazo.agregarMemoCard(tarjeta);
 
         // Leer tarjeta
-        MemoCard tarjetaLeida = mazo.getTarjetasNoVistas().stream().filter(t -> t.getId().equals(tarjeta.getId())).findFirst().orElse(null);
+        MemoCard tarjetaLeida = mazo.getMemoCardsNoVistas().stream().filter(t -> t.getId().equals(tarjeta.getId())).findFirst().orElse(null);
         assertNotNull(tarjetaLeida, "La tarjeta no fue encontrada");
 
         // Actualizar tarjeta
@@ -88,8 +88,8 @@ public class GestionDeMazosTest {
         assertEquals("Ecuaciones cuadráticas", tarjetaLeida.getNombre(), "El nombre de la tarjeta no se actualizó correctamente");
 
         // Eliminar tarjeta
-        mazo.getTarjetasNoVistas().remove(tarjetaLeida);
-        assertFalse(mazo.getTarjetasNoVistas().contains(tarjetaLeida), "La tarjeta no se eliminó correctamente");
+        mazo.getMemoCardsNoVistas().remove(tarjetaLeida);
+        assertFalse(mazo.getMemoCardsNoVistas().contains(tarjetaLeida), "La tarjeta no se eliminó correctamente");
     }
 
     @Test
