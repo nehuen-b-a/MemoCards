@@ -45,7 +45,10 @@ public class MemoCard {
     @Setter
     private Boolean esSanguijuela;
     @Setter
+    private boolean esNueva;
+    @Setter
     private SesionDeEstudio sesionDeEstudioActual;
+
 
     // Métodos
 
@@ -55,6 +58,7 @@ public class MemoCard {
         this.cantidadDeOlvidos = 0;
         this.intentos = 0;
         this.esSanguijuela = false;
+        this.esNueva = true;
     }
 
     public void cambiarEstado(EstadoMemoCard nuevoEstado) {
@@ -85,6 +89,10 @@ public class MemoCard {
 
     public LocalDateTime fechaProximoRepaso(){
         return  fechaUltimoRepaso.plusMinutes(intervaloMinutos);
+    }
+
+    public boolean esNueva() {
+        return this.esNueva;
     }
 }
 
