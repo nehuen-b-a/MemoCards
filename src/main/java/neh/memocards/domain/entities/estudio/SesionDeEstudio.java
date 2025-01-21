@@ -113,7 +113,7 @@ public class SesionDeEstudio {
 
     private void revisarMemoCard(MemoCard memoCard) {
         this.cantidadTotalAciertos++;
-        if(memoCard.getIntervaloMinutos() >= mazo.getPreferencia().getIntervaloMaximoARevisarEnUnaSesion()) {
+        if(memoCard.getEstadoMemoCard().getIntervaloActual() >= mazo.getPreferencia().getIntervaloMaximoARevisarEnUnaSesion()) {
             memoCardsRevisadas.add(memoCard);
             memoCardsPorRevisar.remove(memoCard);
             mazo.repasarMemoCard(memoCard);
