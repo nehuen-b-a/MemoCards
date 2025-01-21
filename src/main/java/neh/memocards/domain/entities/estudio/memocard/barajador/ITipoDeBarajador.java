@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ITipoDeBarajador {
     CircularList<MemoCard> barajarComienzoDeSesion(List<MemoCard> memoCardsNuevas, List<MemoCard> memoCardsRepaso);
+    CircularList<MemoCard> barajar(CircularList<MemoCard> memoCards);
 }
