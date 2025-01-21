@@ -51,6 +51,10 @@ public class MemoCard {
 
     public MemoCard() {
         historialEstados = new ArrayList<>();
+        this.intervaloMinutos = 0L;
+        this.cantidadDeOlvidos = 0;
+        this.intentos = 0;
+        this.esSanguijuela = false;
     }
 
     public void cambiarEstado(EstadoMemoCard nuevoEstado) {
@@ -76,8 +80,11 @@ public class MemoCard {
     }
 
     public Boolean estaListaParaRepasar(){
-        var ultimoRepaso = this.fechaUltimoRepaso;
-        return ultimoRepaso.plusMinutes(intervaloMinutos).isAfter(LocalDateTime.now());
+        return fechaProximoRepaso().isBefore(LocalDateTime.now());
+    }
+
+    public LocalDateTime fechaProximoRepaso(){
+        return  fechaUltimoRepaso.plusMinutes(intervaloMinutos);
     }
 }
 
