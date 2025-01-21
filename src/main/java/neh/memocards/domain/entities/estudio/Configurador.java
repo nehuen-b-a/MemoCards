@@ -4,11 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import neh.memocards.domain.entities.estudio.memocard.barajador.ITipoDeBarajador;
+import neh.memocards.domain.entities.estudio.memocard.barajador.ITipoBarajador;
 import neh.memocards.domain.entities.estudio.memocard.barajador.IntervaloMenorAMayor;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +39,7 @@ public class Configurador {
     @Setter
     private Long intervaloMaximoARevisarEnUnaSesion;
     @Setter
-    private ITipoDeBarajador barajador;
+    private ITipoBarajador barajador;
 
 
 

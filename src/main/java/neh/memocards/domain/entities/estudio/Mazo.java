@@ -3,7 +3,6 @@ package neh.memocards.domain.entities.estudio;
 import lombok.Getter;
 import lombok.Setter;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
-import neh.memocards.domain.entities.estudio.memocard.barajador.ITipoDeBarajador;
 import utils.CircularList;
 
 import java.util.*;
@@ -77,6 +76,6 @@ public class Mazo {
             memoCardsVistas.addAll(memoCardsNoVistas);
         var memoCardsVistasPorRevisar = memoCardsNoVistas.stream().toList().subList(0,preferencia.getMaximoDeCartasARepasar());
 
-        return new HashSet<>(barajador.barajarComienzoDeSesion(nuevasMemocardsPorRepasar,memoCardsVistasPorRevisar).getElements());
+        return new HashSet<>(barajador.barajarComienzoDeSesion(nuevasMemocardsPorRepasar,memoCardsVistasPorRevisar,memoCardsEnRepasoActivo).getElements());
     }
 }

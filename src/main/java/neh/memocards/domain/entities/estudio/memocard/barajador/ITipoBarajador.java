@@ -1,0 +1,12 @@
+package neh.memocards.domain.entities.estudio.memocard.barajador;
+
+import neh.memocards.domain.entities.estudio.memocard.MemoCard;
+import utils.CircularList;
+
+import java.util.List;
+
+public interface ITipoBarajador {
+    CircularList<MemoCard> barajarComienzoDeSesion(List<MemoCard> memoCardsNuevas, List<MemoCard> memoCardsRepaso, CircularList<MemoCard> memoCardsPendientes);
+    CircularList<MemoCard> barajar(CircularList<MemoCard> memoCards);
+    List<MemoCard> ordenarMemoCards(List<MemoCard> memoCards);
+}
