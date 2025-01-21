@@ -2,7 +2,6 @@ package neh.memocards.domain.entities.estudio;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 import neh.memocards.domain.entities.usuarios.Usuario;
@@ -104,16 +103,17 @@ public class Estudiante {
     }
 
     //----Gestion-de-SesionDeEstudio----
-    public void iniciarSesionDeEstudio(Long idTematica, Long idMazo) {
+    public SesionDeEstudio iniciarSesionDeEstudio(Long idTematica, Long idMazo) {
 
         Mazo mazoAEstudiar = buscarTematicaPorId(idTematica).buscarMazoPorId(idMazo);
 
-        SesionDeEstudio nuevaSesion = new SesionDeEstudio(mazoAEstudiar.memoCardsPorRevisar(), this, mazoAEstudiar);
+        SesionDeEstudio nuevaSesion = new SesionDeEstudio(mazoAEstudiar.generarBarajaDeMemoCards(), this, mazoAEstudiar);
 
         nuevaSesion.comenzarSesion();
 
         historialDeEstudio.add(nuevaSesion);
 
+        return nuevaSesion;
     }
 
 
