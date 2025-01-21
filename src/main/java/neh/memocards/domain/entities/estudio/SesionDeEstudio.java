@@ -55,7 +55,7 @@ public class SesionDeEstudio {
     }
 
     public SesionDeEstudio(Set<MemoCard> memoCardsPorRevisar, Estudiante estudiante, Mazo mazo) {
-        new SesionDeEstudio();
+        this();
         this.estudiante = estudiante;
         this.mazo = mazo;
         this.memoCardsPorRevisar = memoCardsPorRevisar;
@@ -63,7 +63,7 @@ public class SesionDeEstudio {
 
     public void comenzarSesion() {
         this.fechaInicio = LocalDateTime.now();
-        memoCardsRevisadas.forEach(memo -> memo.setSesionDeEstudioActual(this));
+        memoCardsPorRevisar.forEach(memo -> memo.setSesionDeEstudioActual(this));
     }
 
     public void finalizarSesion() {
@@ -78,7 +78,13 @@ public class SesionDeEstudio {
         this.tiempoEstudio = java.time.Duration.between(this.fechaInicio, this.fechaFin).toSeconds();
 
         // Finalizo sesión para todas las MemoCards
-        memoCardsRevisadas.forEach(memo -> memo.setSesionDeEstudioActual(null));
+
+        if (memoCardsRevisadas != null) {
+            memoCardsRevisadas.forEach(memo -> memo.setSesionDeEstudioActual(null));
+        }
+
+        memoCardsPorRevisar.forEach(memo -> memo.setSesionDeEstudioActual(null));
+
     }
 
     public void registrarMetrica(MemoCard memoCard, Dificultad dificultad) {
@@ -110,6 +116,7 @@ public class SesionDeEstudio {
         if(memoCard.getIntervaloMinutos() >= mazo.getPreferencia().getIntervaloMaximoARevisarEnUnaSesion()) {
             memoCardsRevisadas.add(memoCard);
             memoCardsPorRevisar.remove(memoCard);
+            mazo.repasarMemoCard(memoCard);
         }
     }
 
@@ -126,4 +133,12 @@ public class SesionDeEstudio {
         return metricas;
     }
 
+    public boolean estaActiva() {
+        return this.fechaInicio != null && this.fechaFin == null;
+    }
+
+    public void estudiarMemoCard(MemoCard memoCardActual, Dificultad dificultad) {
+        memoCardActual.getEstadoMemoCard().cambiarIntervalo(memoCardActual.getIntervaloMinutos(),dificultad);
+        revisarMemoCard(memoCardActual);
+    }
 }
