@@ -39,7 +39,10 @@ public class Configurador {
     @Setter
     private Long intervaloMaximoARevisarEnUnaSesion;
     @Setter
+    private Long intervaloParaIncluirMemoCardsNuevas;
+    @Setter
     private ITipoBarajador barajador;
+
 
 
 
@@ -66,6 +69,7 @@ public class Configurador {
                 10,
                 20,
                 120L,
+                1440L,
                 new IntervaloMenorAMayor()
         );
     }
