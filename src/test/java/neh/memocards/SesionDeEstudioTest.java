@@ -5,6 +5,7 @@ import neh.memocards.domain.entities.estudio.memocard.Dificultad;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 import neh.memocards.domain.entities.estudio.memocard.RespuestaMemo;
 import neh.memocards.domain.entities.estudio.memocard.estados.Aprendizaje;
+import neh.memocards.domain.entities.estudio.memocard.estados.Reaprendizaje;
 import neh.memocards.domain.entities.estudio.memocard.estados.Repaso;
 import org.junit.jupiter.api.*;
 import utils.CircularList;
@@ -14,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
+import java.util.random.RandomGenerator;
 
 public class SesionDeEstudioTest {
 
@@ -34,7 +37,7 @@ public class SesionDeEstudioTest {
         // Agregar 15 cartas de prueba
         for (int i = 1; i <= 15; i++) {
             var memoCard = new MemoCard();
-            memoCard.setId(1L);
+            memoCard.setId((long)i);
             memoCard.setNombre("Memo card " + i);
             memoCard.setFechaUltimoRepaso(LocalDateTime.now().minusMinutes(2000));
             memoCard.setRespuesta(new RespuestaMemo("Respuesta " + i));
@@ -44,6 +47,7 @@ public class SesionDeEstudioTest {
             if (i <= 5) {
                 mazo.agregarMemoCard(memoCard);
             } else {
+                memoCard.setIntentos(2);
                 mazo.getMemoCardsVistas().add(memoCard);
             }
         }
@@ -75,10 +79,23 @@ public class SesionDeEstudioTest {
         sesion.comenzarSesion();
         CircularList<MemoCard> activas = sesion.getMazo().getMemoCardsEnRepasoActivo();
         assertEquals(7, activas.size(), "Debe haber 7 cartas activas inicialmente (2 nuevas y 5 repasadas)");
+        //verificamos que siempre luego del primer feedback en cartas con intervalos bajos estas se mantienen en Aprendizaje o Reaprendizaje
         sesion.estudiarMemoCard(activas.next(), BIEN);
         sesion.estudiarMemoCard(activas.next(), OLVIDO);
         assertInstanceOf(Aprendizaje.class, activas.get(0).getEstadoMemoCard(), "La carta marcada como BIEN debe pasar seguir en aprendizaje");
         assertInstanceOf(Aprendizaje.class, activas.get(1).getEstadoMemoCard(), "La carta marcada como OLVIDO debe seguir en aprendizaje");
+        for(int i = 2; i <= 6 ; i++ ){
+            sesion.estudiarMemoCard(activas.next(), OLVIDO);
+        }
+
+        long idMemo = activas.get(0).getId();
+        assertEquals(0, activas.getElements().stream().filter(memo-> memo.getEstadoMemoCard() instanceof Repaso).toList().size(), "La carta marcada como OLVIDO debe seguir en aprendizaje");
+
+        //cuando una memoCard supera el umbral maximo de intervalo por sesion esta sale de la lista activa y al mazo como vista
+        sesion.estudiarMemoCard(activas.next(), BIEN);
+        assertFalse(activas.getElements().stream().anyMatch(memo -> memo.getId() == idMemo), "La carta marcada como BIEN no debe estar como activa");
+        assertTrue(mazo.getMemoCardsVistas().stream().anyMatch(memo -> memo.getId() == idMemo));
+
         sesion.finalizarSesion();
     }
 
@@ -93,7 +110,7 @@ public class SesionDeEstudioTest {
         assertEquals(7, activas.size(), "Debe haber 7 cartas activas inicialmente (2 nuevas y 5 repasadas)");
 
         // Verificar que las cartas nuevas incluidas cumplen las restricciones
-        long nuevas = activas.getElements().stream().filter(c -> c.getEstadoMemoCard() instanceof Aprendizaje).count();
+        long nuevas = activas.getElements().stream().filter(c -> c.getIntentos() == 0).count();
         assertEquals(2, nuevas, "Debe haber 2 cartas nuevas en la sesión activa");
     }
 
