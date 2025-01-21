@@ -1,9 +1,11 @@
 package neh.memocards.domain.entities.estudio.memocard;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter @Getter
+@NoArgsConstructor
 public class RespuestaMemo {
     // Atributos
     private Long id;
@@ -13,4 +15,9 @@ public class RespuestaMemo {
     private String rutaVideo;
 
     // Métodos (por implementar según necesidades)
+
+    public RespuestaMemo(String texto) {
+        new RespuestaMemo();
+        this.texto = texto;
+    }
 }
