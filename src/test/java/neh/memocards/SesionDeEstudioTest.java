@@ -1,24 +1,18 @@
 package neh.memocards;
 
 import neh.memocards.domain.entities.estudio.*;
-import neh.memocards.domain.entities.estudio.memocard.Dificultad;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 import neh.memocards.domain.entities.estudio.memocard.RespuestaMemo;
 import neh.memocards.domain.entities.estudio.memocard.estados.Aprendizaje;
-import neh.memocards.domain.entities.estudio.memocard.estados.Reaprendizaje;
 import neh.memocards.domain.entities.estudio.memocard.estados.Repaso;
-import org.assertj.core.error.ActualIsNotEmpty;
 import org.junit.jupiter.api.*;
 import utils.CircularList;
-
 import static neh.memocards.domain.entities.estudio.memocard.Dificultad.*;
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.random.RandomGenerator;
+
 
 public class SesionDeEstudioTest {
 

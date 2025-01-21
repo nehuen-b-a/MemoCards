@@ -1,6 +1,6 @@
 package neh.memocards;
 
-import neh.memocards.domain.entities.estudio.Configurador;
+import neh.memocards.domain.entities.estudio.*;
 import neh.memocards.domain.entities.estudio.memocard.Dificultad;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 import neh.memocards.domain.entities.estudio.memocard.estados.Aprendizaje;
@@ -19,11 +19,29 @@ public class EstadosTest {
     @BeforeEach
     void setUp() {
         Configurador configurador = Configurador.configuradorPredeterminado();
+
+        var mazo = new Mazo();
+        mazo.setId(1L);
+        mazo.setNombre("Mazo de Prueba");
+        mazo.setPreferencia(configurador);
+
         memoCard = new MemoCard();
         memoCard.setConfigurador(configurador);
         memoCard.setEstadoMemoCard(new Aprendizaje(memoCard));
         memoCard.setCantidadDeOlvidos(0);
         memoCard.setEsSanguijuela(false);
+
+        mazo.agregarMemoCard(memoCard);
+
+        var estudiante = new Estudiante();
+        estudiante.setNombre("Estudiante");
+        TematicaEstudio tematica = new TematicaEstudio();
+        tematica.setId(1L);
+        estudiante.agregarTematicaDeEstudio(tematica);
+        estudiante.agregarMazoATematica(mazo, 1L);
+
+        estudiante.iniciarSesionDeEstudio(1L,1L);
+
     }
 
     @Test
