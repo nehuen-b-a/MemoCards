@@ -96,4 +96,13 @@ public class CircularList<T> {
     public T remove(int i) {
         return elements.remove(i);
     }
+
+    public T remove(T element){
+        for (int i = 0; i < elements.size(); i++) {
+            if(elements.get(i).equals(element)){
+                return elements.remove(i);
+            }
+        }
+        return null;
+    }
 }
