@@ -60,5 +60,10 @@ public abstract class EstadoMemoCard {
         umbralSanguijuela = configurador.getUmbralSanguijuelas();
     }
 
+    protected void actualizarSesion(Dificultad dificultad) {
+        memoCard.getSesionDeEstudioActual().registrarMetrica(memoCard, dificultad);
+        memoCard.setEsNueva(false);
+    }
+
 
 }

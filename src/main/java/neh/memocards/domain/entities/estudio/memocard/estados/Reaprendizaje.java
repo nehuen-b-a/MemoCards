@@ -57,7 +57,7 @@ public class Reaprendizaje extends EstadoMemoCard {
             this.intervaloActual = estimarIntervalo(intervaloAnterior, dificultad);
             this.intervalosBonificados = this.intervalosBonificados.stream().map(intervalo -> super.bonificarIntervalo(intervalo, dificultad)).toList();
             actualizarBonificacionTotal(dificultad);
-            memoCard.getSesionDeEstudioActual().registrarMetrica(memoCard,dificultad);
+            actualizarSesion(dificultad);
             return intervaloActual;
         }
 
@@ -72,12 +72,12 @@ public class Reaprendizaje extends EstadoMemoCard {
         if (rachaAciertos > intervalos.size()) {
             this.actualizarEstado();
             super.getMemoCard().getEstadoMemoCard().cambiarIntervalo(intervaloAnterior, dificultad);
-            memoCard.getSesionDeEstudioActual().registrarMetrica(memoCard,dificultad);
+            actualizarSesion(dificultad);
             return memoCard.getEstadoMemoCard().getIntervaloActual();
         } else {
             this.intervaloActual = estimarIntervalo(intervaloAnterior, dificultad);
             actualizarBonificacionTotal(dificultad);
-            memoCard.getSesionDeEstudioActual().registrarMetrica(memoCard,dificultad);
+            actualizarSesion(dificultad);
             return super.getIntervaloActual();
         }
     }
