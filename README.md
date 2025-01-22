@@ -42,6 +42,9 @@ MemoCards/
 ## Diagrama de Clases
 ![Diagrama de Clases](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/nehuen-b-a/MemoCards/refs/heads/main/documentation/diagrams/DiagramaDeClases.puml)
 
+## Diagrama de Clases
+![Diagrama de Clases](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/nehuen-b-a/MemoCards/refs/heads/main/documentation/diagrams/DiagramaDeEntidadRelacion.puml)
+
 
 
 ## Instalación
