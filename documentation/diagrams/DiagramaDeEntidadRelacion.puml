@@ -1,0 +1,158 @@
+@startuml
+left to right direction
+
+' Entidades principales
+entity Usuario {
+    + id : Long [PK]
+    --
+    nombre : String
+    clave : String
+    rol_id : Long [FK]
+}
+
+entity Rol {
+    + id : Long [PK]
+    --
+    tipoRol : String
+}
+
+entity Permiso {
+    + id : Long [PK]
+    --
+    nombre : String
+}
+
+entity Estudiante {
+    + id : Long [PK]
+    --
+    nombre : String
+    apellido : String
+    usuario_id : Long [FK]
+}
+
+entity TematicaEstudio {
+    + id : Long [PK]
+    --
+    estudiante_id : Long [FK]
+    nombre : String
+    descripcion : String
+}
+
+entity Mazo {
+    + id : Long [PK]
+    --
+    nombre : String
+    descripcion : String
+    tematica_id : Long [FK]
+    configurador_id : Long [FK]
+}
+
+entity Configurador {
+    + id : Long [PK]
+    --
+    estudiante_id : Long [FK]
+    intervaloInicial : String
+    distanciaPorcentualIntervalo : Double
+    coeficienteDeRetencion : Double
+    bonusFacil : Double
+    bonusDificil : Double
+    intervaloMinimo : Long
+    intervaloMaximo : Long
+    umbralSanguijuelas : Integer
+    maximoDeNuevasCartas : Integer
+    maximoDeCartasARepasar : Integer
+    intervaloMaximoARevisarEnUnaSesion : Long
+    intervaloParaIncluirMemoCardsNuevas : Long
+}
+
+entity MemoCard {
+    + id : Long [PK]
+    --
+    nombre : String
+    pregunta : String
+    respuesta_id : Long [FK]
+    fechaUltimoRepaso : LocalDateTime
+    estadoMemoCard : EstadoMemoCard
+    configurador_id : Long [FK]
+    intervaloMinutos : Long
+    cantidadDeOlvidos : Integer
+    intentos : Integer
+    esSanguijuela : Boolean
+    esNueva : Boolean
+    mazo_id : Long [FK]
+}
+
+entity EstadoMemoCard {
+    + id : Long [PK]
+    --
+    tipo : String [Discriminador]
+    nombre : String
+    intervaloActual : Long
+    rachaAciertos : Integer
+    rachaDesaciertos : Integer
+    umbralSanguijuela : Integer
+    coeficienteDeBonusPorFacilidad : Double
+    coeficientePorDificultad : Double
+    intervalos : String [Aprendizaje, Reaprendizaje]
+    intervalosBonificados : String [Aprendizaje, Reaprendizaje]
+    bonificacionTotal : Double [Aprendizaje, Reaprendizaje]
+    distanciaPorcentualIntervalo : Double [Reaprendizaje]
+    intervaloMin : Long [Reaprendizaje]
+    coeficienteDeRetencion : Double [Repaso]
+    intervaloMax : Long [Repaso]
+}
+
+entity RespuestaMemo {
+    + id : Long [PK]
+    --
+    texto : String
+    rutaImagen : String
+    rutaAudio : String
+    rutaVideo : String
+}
+
+entity SesionDeEstudio {
+    + id : Long [PK]
+    --
+    estudiante_id : Long [FK]
+    mazo_id : Long [FK]
+    tiempoEstudio : Long
+    cantidadTotalIntentos : Integer
+    cantidadTotalAciertos : Integer
+    cantidadTotalDesaciertos : Integer
+    cantidadTotalDificil : Integer
+    cantidadTotalBien : Integer
+    cantidadTotalFacil : Integer
+    fechaInicio : LocalDateTime
+    fechaFin : LocalDateTime
+    estaFinalizada : Boolean
+}
+
+entity HistorialEstadoMemoCard {
+    + id : Long [PK]
+    --
+    memoCard_id : Long [FK]
+    estadoAnterior : EstadoMemoCard  [FK]
+    estadoNuevo : EstadoMemoCard  [FK]
+    fechaCambio : LocalDateTime
+}
+
+' Relaciones
+Usuario }|--|| Rol
+Rol ||--o{ Permiso
+Estudiante }|--|| Usuario
+Estudiante ||--|{ TematicaEstudio
+TematicaEstudio ||--o{ Mazo
+Mazo }|--|| Configurador
+Mazo ||--o{ MemoCard
+MemoCard ||--o| RespuestaMemo
+MemoCard }|--|| Configurador
+MemoCard ||--o{ HistorialEstadoMemoCard
+MemoCard }|--|| EstadoMemoCard
+HistorialEstadoMemoCard }|--|| EstadoMemoCard : estadoAnterior
+HistorialEstadoMemoCard }|--|| EstadoMemoCard : estadoNuevo
+SesionDeEstudio }|--|| Estudiante
+SesionDeEstudio }|--|| Mazo
+SesionDeEstudio ||--o{ MemoCard
+
+@enduml
