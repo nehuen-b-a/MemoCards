@@ -3,138 +3,138 @@ left to right direction
 
 ' Entidades principales
 entity Usuario {
-    + id : Long [PK]
+    + id : INTEGER(11) [PK]
     --
-    nombre : String
-    clave : String
-    rol_id : Long [FK]
+    nombre : VARCHAR(255)
+    clave : VARCHAR(255)
+    rol_id : INTEGER(11) [FK]
 }
 
 entity Rol {
-    + id : Long [PK]
+    + id : INTEGER(11) [PK]
     --
-    tipoRol : String
+    tipoRol : VARCHAR(255)
 }
 
 entity Permiso {
-    + id : Long [PK]
+    + id : INTEGER(11) [PK]
     --
-    nombre : String
+    nombre : VARCHAR(255)
 }
 
 entity Estudiante {
-    + id : Long [PK]
+    + id : INTEGER(11) [PK]
     --
-    nombre : String
-    apellido : String
-    usuario_id : Long [FK]
+    nombre : VARCHAR(255)
+    apellido : VARCHAR(255)
+    usuario_id : INTEGER(11) [FK]
 }
 
 entity TematicaEstudio {
-    + id : Long [PK]
+    + id : INTEGER(11) [PK]
     --
-    estudiante_id : Long [FK]
-    nombre : String
-    descripcion : String
+    estudiante_id : INTEGER(11) [FK]
+    nombre : VARCHAR(255)
+    descripcion : VARCHAR(255)
 }
 
 entity Mazo {
-    + id : Long [PK]
+    + id : INTEGER(11) [PK]
     --
-    nombre : String
-    descripcion : String
-    tematica_id : Long [FK]
-    configurador_id : Long [FK]
+    nombre : VARCHAR(255)
+    descripcion : VARCHAR(255)
+    tematica_id : INTEGER(11) [FK]
+    configurador_id : INTEGER(11) [FK]
 }
 
 entity Configurador {
-    + id : Long [PK]
+    + id : INTEGER(11) [PK]
     --
-    estudiante_id : Long [FK]
-    intervaloInicial : String
-    distanciaPorcentualIntervalo : Double
-    coeficienteDeRetencion : Double
-    bonusFacil : Double
-    bonusDificil : Double
-    intervaloMinimo : Long
-    intervaloMaximo : Long
-    umbralSanguijuelas : Integer
-    maximoDeNuevasCartas : Integer
-    maximoDeCartasARepasar : Integer
-    intervaloMaximoARevisarEnUnaSesion : Long
-    intervaloParaIncluirMemoCardsNuevas : Long
+    estudiante_id : INTEGER(11) [FK]
+    intervaloInicial : VARCHAR(255)
+    distanciaPorcentualIntervalo : DOUBLE
+    coeficienteDeRetencion : DOUBLE
+    bonusFacil : DOUBLE
+    bonusDificil : DOUBLE
+    intervaloMinimo : INTEGER(11)
+    intervaloMaximo : INTEGER(11)
+    umbralSanguijuelas : SMALLINT
+    maximoDeNuevasCartas : SMALLINT
+    maximoDeCartasARepasar : SMALLINT
+    intervaloMaximoARevisarEnUnaSesion : INTEGER(11)
+    intervaloParaIncluirMemoCardsNuevas : INTEGER(11)
 }
 
 entity MemoCard {
-    + id : Long [PK]
+    + id : INTEGER(11) [PK]
     --
-    nombre : String
-    pregunta : String
-    respuesta_id : Long [FK]
-    fechaUltimoRepaso : LocalDateTime
+    nombre : VARCHAR(255)
+    pregunta : VARCHAR(255)
+    respuesta_id : INTEGER(11) [FK]
+    fechaUltimoRepaso : DATETIME
     estadoMemoCard : EstadoMemoCard
-    configurador_id : Long [FK]
-    intervaloMinutos : Long
-    cantidadDeOlvidos : Integer
-    intentos : Integer
-    esSanguijuela : Boolean
-    esNueva : Boolean
-    mazo_id : Long [FK]
+    configurador_id : INTEGER(11) [FK]
+    intervaloMinutos : INTEGER(11)
+    cantidadDeOlvidos : SMALLINT
+    intentos : SMALLINT
+    esSanguijuela : BIT
+    esNueva : BIT
+    mazo_id : INTEGER(11) [FK]
 }
 
 entity EstadoMemoCard {
-    + id : Long [PK]
+    + id : INTEGER(11) [PK]
     --
-    tipo : String [Discriminador]
-    nombre : String
-    intervaloActual : Long
-    rachaAciertos : Integer
-    rachaDesaciertos : Integer
-    umbralSanguijuela : Integer
-    coeficienteDeBonusPorFacilidad : Double
-    coeficientePorDificultad : Double
-    intervalos : String [Aprendizaje, Reaprendizaje]
-    intervalosBonificados : String [Aprendizaje, Reaprendizaje]
-    bonificacionTotal : Double [Aprendizaje, Reaprendizaje]
-    distanciaPorcentualIntervalo : Double [Reaprendizaje]
-    intervaloMin : Long [Reaprendizaje]
-    coeficienteDeRetencion : Double [Repaso]
-    intervaloMax : Long [Repaso]
+    tipo : VARCHAR(255) [Discriminador]
+    nombre : VARCHAR(255)
+    intervaloActual : INTEGER(11)
+    rachaAciertos : SMALLINT
+    rachaDesaciertos : SMALLINT
+    umbralSanguijuela : SMALLINT
+    coeficienteDeBonusPorFacilidad : DOUBLE
+    coeficientePorDificultad : DOUBLE
+    intervalos : VARCHAR(255) [Aprendizaje, Reaprendizaje]
+    intervalosBonificados : VARCHAR(255) [Aprendizaje, Reaprendizaje]
+    bonificacionTotal : DOUBLE [Aprendizaje, Reaprendizaje]
+    distanciaPorcentualIntervalo : DOUBLE [Reaprendizaje]
+    intervaloMin : INTEGER(11) [Reaprendizaje]
+    coeficienteDeRetencion : DOUBLE [Repaso]
+    intervaloMax : INTEGER(11) [Repaso]
 }
 
 entity RespuestaMemo {
-    + id : Long [PK]
+    + id : INTEGER(11) [PK]
     --
-    texto : String
-    rutaImagen : String
-    rutaAudio : String
-    rutaVideo : String
+    texto : VARCHAR(255)
+    rutaImagen : VARCHAR(255)
+    rutaAudio : VARCHAR(255)
+    rutaVideo : VARCHAR(255)
 }
 
 entity SesionDeEstudio {
-    + id : Long [PK]
+    + id : INTEGER(11) [PK]
     --
-    estudiante_id : Long [FK]
-    mazo_id : Long [FK]
-    tiempoEstudio : Long
-    cantidadTotalIntentos : Integer
-    cantidadTotalAciertos : Integer
-    cantidadTotalDesaciertos : Integer
-    cantidadTotalDificil : Integer
-    cantidadTotalBien : Integer
-    cantidadTotalFacil : Integer
-    fechaInicio : LocalDateTime
-    fechaFin : LocalDateTime
-    estaFinalizada : Boolean
+    estudiante_id : INTEGER(11) [FK]
+    mazo_id : INTEGER(11) [FK]
+    tiempoEstudio : INTEGER(11)
+    cantidadTotalIntentos : SMALLINT
+    cantidadTotalAciertos : SMALLINT
+    cantidadTotalDesaciertos : SMALLINT
+    cantidadTotalDificil : SMALLINT
+    cantidadTotalBien : SMALLINT
+    cantidadTotalFacil : SMALLINT
+    fechaInicio : DATETIME
+    fechaFin : DATETIME
+    estaFinalizada : BIT
 }
 
 entity HistorialEstadoMemoCard {
-    + id : Long [PK]
+    + id : INTEGER(11) [PK]
     --
-    memoCard_id : Long [FK]
+    memoCard_id : INTEGER(11) [FK]
     estadoAnterior : EstadoMemoCard  [FK]
     estadoNuevo : EstadoMemoCard  [FK]
-    fechaCambio : LocalDateTime
+    fechaCambio : DATETIME
 }
 
 ' Relaciones
