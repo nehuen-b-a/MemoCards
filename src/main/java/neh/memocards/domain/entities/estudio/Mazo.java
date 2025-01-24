@@ -1,5 +1,6 @@
 package neh.memocards.domain.entities.estudio;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
@@ -9,24 +10,49 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
+@Entity
+@Table(name="mazos")
 public class Mazo {
     // Atributos
     @Setter
+    @Id @GeneratedValue
     private Long id;
+
     @Setter
+    @Column(name = "nombre", nullable = false)
     private String nombre;
+
     @Setter
+    @Column(name = "descripcion", nullable = false)
     private String descripcion;
+
     @Setter
+    @ManyToOne
+    @JoinColumn(name="tematica_id", referencedColumnName = "id")
+    private TematicaEstudio tematica;
+
+    @Setter
+    @ManyToOne
+    @JoinColumn(name="config_id", referencedColumnName = "id")
     private Configurador preferencia;
 
+    @Setter
+    @OneToMany
+    @JoinColumn(name="memocard_no_vista_id", referencedColumnName = "id")
     private Set<MemoCard> memoCardsNoVistas;
 
+    @Setter
+    @OneToMany
+    @JoinColumn(name="memocard_vista_id", referencedColumnName = "id")
     private Set<MemoCard> memoCardsVistas;
 
+    @Setter
+    @OneToMany
+    @JoinColumn(name="memocard_activa_id", referencedColumnName = "id")
     private CircularList<MemoCard> memoCardsEnRepasoActivo;
 
     @Setter
+    @Column(name="fecha_ultima_nueva_inclusion")
     private LocalDateTime fechaUltimaInclusionNuevasMemoCards;
 
     // Métodos

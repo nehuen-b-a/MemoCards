@@ -1,30 +1,36 @@
 package neh.memocards.domain.entities.estudio;
 
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
+@NoArgsConstructor
+@Entity @Table(name = "tematicas")
 public class TematicaEstudio {
     // Atributos
     @Setter
+    @Id @GeneratedValue
     private Long id;
+
     @Setter
+    @Column(name = "nombre", nullable = false)
     private String nombre;
+
     @Setter
+    @Column(name = "descripcion", nullable = false)
     private String descripcion;
-    @Getter
+
+    @Setter
+    @ManyToOne @JoinColumn(name="estudiante_id", referencedColumnName = "id")
+    private Estudiante estudiante;
+
+    @OneToMany(mappedBy = "mazos")
     private Set<Mazo> mazos;
 
-    // Métodos (por implementar según necesidades)
-
-
-    public TematicaEstudio() {
-        this.mazos = new HashSet<>();
-    }
-
+    // Métodos
 
     public void agregarMazo(Mazo mazo){
         this.mazos.add(mazo);

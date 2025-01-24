@@ -1,5 +1,6 @@
 package neh.memocards.domain.entities.estudio.memocard;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,22 +17,33 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-
+@Entity @Table(name="memocards")
 public class MemoCard {
     // Atributos
     @Setter
+    @Id @GeneratedValue
     private Long id;
+
     @Setter
+    @Column(name = "nombre", nullable = false)
     private String nombre;
+
     @Setter
+    @Column(name = "pregunta", nullable = false)
     private String pregunta;
+
     @Setter
+    @OneToOne @JoinColumn(name = "rta_id", referencedColumnName = "id")
     private RespuestaMemo respuesta;
+
     @Setter
     private LocalDateTime fechaUltimoRepaso;
+
     @Setter
     private EstadoMemoCard estadoMemoCard;
+
     @Setter
+
     private Configurador configurador;
 
     private List<HistorialEstadoMemoCard> historialEstados;

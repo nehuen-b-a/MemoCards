@@ -18,8 +18,14 @@ import java.util.stream.Collectors;
 public class Configurador {
     // Atributos
     @Setter
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue
     private Long id;
+
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "estudiante_id", referencedColumnName = "estudiantes")
+    private Estudiante estudiante;
 
     @ElementCollection
     @CollectionTable(
@@ -76,8 +82,6 @@ public class Configurador {
     @Setter
     @Convert(converter = TipoBarajadorConverter.class)
     private ITipoBarajador barajador;
-
-
 
 
     // Métodos

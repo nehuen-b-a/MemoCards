@@ -1,6 +1,8 @@
 package neh.memocards.domain.entities.estudio;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
@@ -14,16 +16,35 @@ import java.util.Set;
 
 @AllArgsConstructor
 @Getter
+@Entity
+@Table(name = "estudiantes")
 public class Estudiante {
     // Atributos
     @Setter
+    @Id @GeneratedValue
+    private Long id;
+
+    @Setter
+    @Column(name = "nombre", nullable = false)
     private String nombre;
+
     @Setter
+    @Column(name = "apellido", nullable = false)
     private String apellido;
+
     @Setter
+    @OneToOne
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "tematicas")
+    @JoinColumn(name = "tematica_id", referencedColumnName = "id")
     private Set<TematicaEstudio> tematicas;
+
+    @OneToMany(mappedBy = "configuraciones")
     private List<Configurador> preferencias;
+
+    @OneToMany(mappedBy = "sesiones_estudio")
     private List<SesionDeEstudio> historialDeEstudio;
 
     // Metodos

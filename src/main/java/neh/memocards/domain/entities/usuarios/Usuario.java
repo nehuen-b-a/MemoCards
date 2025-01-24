@@ -1,6 +1,7 @@
 package neh.memocards.domain.entities.usuarios;
 
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,14 +11,20 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Getter @Setter
 @NoArgsConstructor
+@Entity @Table(name="usuarios")
 public class Usuario {
-
+  @Setter
+  @Id @GeneratedValue
   private Long id;
 
+  @Column(name = "nombre", nullable = false, unique = true)
   private String nombre;
 
+  @Column(name = "clave", nullable = false)
   private String clave;
 
+  @ManyToOne
+  @JoinColumn(name = "rol_id", referencedColumnName = "id", nullable = false)
   private Rol rol;
 
   public Usuario(String nombre) {

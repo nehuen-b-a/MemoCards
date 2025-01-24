@@ -1,5 +1,6 @@
 package neh.memocards.domain.entities.estudio;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import neh.memocards.domain.entities.estudio.memocard.Dificultad;
@@ -9,32 +10,55 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
+@Entity @Table(name = "sesiones_estudio")
 public class SesionDeEstudio {
     // Atributos
     @Setter
+    @Id
+    @GeneratedValue
     Long id;
+
     @Setter
+    @ManyToOne
+    @JoinColumn(name="estudiante_id", referencedColumnName = "id")
     Estudiante estudiante;
+
     @Setter
+    @OneToOne
+    @JoinColumn(name="mazo_id", referencedColumnName = "id")
     Mazo mazo;
+
     @Setter
+    @Column(name = "tiempo_estudio")
     Long tiempoEstudio;
+
+
     Set<MemoCard> memoCardsPorRevisar;
+
     Set<MemoCard> memoCardsRevisadas;
+
     @Setter
     Integer cantidadTotalIntentos;
+
     @Setter
     Integer cantidadTotalAciertos;
+
     @Setter
     Integer cantidadTotalDesaciertos;
+
     @Setter
     Integer cantidadTotalDificil;
+
     @Setter
     Integer cantidadTotalBien;
+
     @Setter
     Integer cantidadTotalFacil;
+
     LocalDateTime fechaInicio;
+
     LocalDateTime fechaFin;
+
     @Setter
     Boolean estaFinalizada;
 
