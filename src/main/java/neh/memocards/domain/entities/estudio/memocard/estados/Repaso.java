@@ -1,13 +1,18 @@
 package neh.memocards.domain.entities.estudio.memocard.estados;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import neh.memocards.domain.entities.estudio.Configurador;
 import neh.memocards.domain.entities.estudio.memocard.Dificultad;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
 
 @Getter
-
+@NoArgsConstructor
+@Entity
+@DiscriminatorValue("repaso")
 public class Repaso extends EstadoMemoCard {
     // Atributos
     private Double coeficienteDeRetencion;

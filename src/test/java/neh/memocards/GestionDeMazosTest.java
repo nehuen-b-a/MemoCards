@@ -18,6 +18,7 @@ public class GestionDeMazosTest {
 
     @BeforeEach
     void setUp() {
+        // Crear mazo
         estudiante = new Estudiante();
         tematica = new TematicaEstudio();
         tematica.setId(1L);
@@ -31,14 +32,12 @@ public class GestionDeMazosTest {
 
         estudiante.agregarTematicaDeEstudio(tematica);
         estudiante.agregarMazoATematica(mazo, tematica.getId());
+
+        assertTrue(tematica.getMazos().contains(mazo), "El mazo no se agregó correctamente");
     }
 
     @Test
     void testCrearLeerActualizarEliminarMazo() {
-        // Crear mazo
-
-        assertTrue(tematica.getMazos().contains(mazo), "El mazo no se agregó correctamente");
-
         // Leer mazo
         Mazo mazoLeido = tematica.buscarMazoPorId(mazo.getId());
         assertNotNull(mazoLeido, "El mazo no fue encontrado");

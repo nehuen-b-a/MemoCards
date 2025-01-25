@@ -37,28 +37,44 @@ public class MemoCard {
     private RespuestaMemo respuesta;
 
     @Setter
+    @Column(name="fecha_ultimo_repaso")
     private LocalDateTime fechaUltimoRepaso;
 
     @Setter
+    @OneToOne(mappedBy = "memoCard")
     private EstadoMemoCard estadoMemoCard;
 
     @Setter
-
+    @ManyToOne
+    @JoinColumn(name="config_id", referencedColumnName = "id", nullable = false)
     private Configurador configurador;
 
+    @OneToMany(mappedBy = "memoCard")
     private List<HistorialEstadoMemoCard> historialEstados;
 
     @Setter
+    @Column(name = "intervalo_minutos", nullable = false)
     private Long intervaloMinutos;
+
     @Setter
+    @Column(name = "cantidad_olvidos", nullable = false)
     private Integer cantidadDeOlvidos;
+
     @Setter
+    @Column(name = "intentos", nullable = false)
     private Integer intentos;
+
     @Setter
+    @Column(name = "es_sanguijuela", nullable = false)
     private Boolean esSanguijuela;
+
     @Setter
+    @Column(name = "es_nueva", nullable = false)
     private boolean esNueva;
+
     @Setter
+    @ManyToOne
+    @JoinColumn(name="sesion_id", referencedColumnName = "id")
     private SesionDeEstudio sesionDeEstudioActual;
 
 

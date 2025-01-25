@@ -9,49 +9,52 @@ import utils.CircularList;
 import java.time.LocalDateTime;
 import java.util.*;
 
-@Getter
+
 @Entity
 @Table(name="mazos")
 public class Mazo {
     // Atributos
-    @Setter
+    @Setter @Getter
     @Id @GeneratedValue
     private Long id;
 
-    @Setter
+    @Setter @Getter
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Setter
+    @Setter @Getter
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
-    @Setter
+    @Setter @Getter
     @ManyToOne
     @JoinColumn(name="tematica_id", referencedColumnName = "id")
     private TematicaEstudio tematica;
 
-    @Setter
+    @Setter @Getter
     @ManyToOne
     @JoinColumn(name="config_id", referencedColumnName = "id")
     private Configurador preferencia;
 
-    @Setter
+    @Setter @Getter
     @OneToMany
     @JoinColumn(name="memocard_no_vista_id", referencedColumnName = "id")
     private Set<MemoCard> memoCardsNoVistas;
 
-    @Setter
+    @Setter @Getter
     @OneToMany
     @JoinColumn(name="memocard_vista_id", referencedColumnName = "id")
     private Set<MemoCard> memoCardsVistas;
 
-    @Setter
     @OneToMany
-    @JoinColumn(name="memocard_activa_id", referencedColumnName = "id")
-    private CircularList<MemoCard> memoCardsEnRepasoActivo;
+    @JoinTable(
+            name = "mazo_memocard_activas",
+            joinColumns = @JoinColumn(name = "mazo_id"),
+            inverseJoinColumns = @JoinColumn(name = "memocard_id")
+    )
+    private List<MemoCard> memoCardsEnRepasoActivo;
 
-    @Setter
+    @Setter @Getter
     @Column(name="fecha_ultima_nueva_inclusion")
     private LocalDateTime fechaUltimaInclusionNuevasMemoCards;
 
@@ -60,7 +63,13 @@ public class Mazo {
     public Mazo() {
         memoCardsNoVistas = new HashSet<>();
         memoCardsVistas = new HashSet<>();
-        memoCardsEnRepasoActivo = new CircularList<>();
+        memoCardsEnRepasoActivo = new ArrayList<>() ;
+    }
+
+    public CircularList<MemoCard> getMemoCardsEnRepasoActivo() {
+        var circular = new CircularList<MemoCard>();
+        circular.getElements().addAll(memoCardsEnRepasoActivo);
+        return circular;
     }
 
 
@@ -112,6 +121,6 @@ public class Mazo {
 
         this.memoCardsEnRepasoActivo = barajador.barajarComienzoDeSesion(nuevasMemocardsPorRepasar,memoCardsVistasPorRevisar,memoCardsEnRepasoActivo);
 
-        return new HashSet<>((memoCardsEnRepasoActivo).getElements());
+        return new HashSet<>(memoCardsEnRepasoActivo);
     }
 }

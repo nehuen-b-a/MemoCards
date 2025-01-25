@@ -37,14 +37,13 @@ public class Estudiante {
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "tematicas")
-    @JoinColumn(name = "tematica_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "estudiante")
     private Set<TematicaEstudio> tematicas;
 
-    @OneToMany(mappedBy = "configuraciones")
+    @OneToMany(mappedBy = "estudiante")
     private List<Configurador> preferencias;
 
-    @OneToMany(mappedBy = "sesiones_estudio")
+    @OneToMany(mappedBy = "estudiante")
     private List<SesionDeEstudio> historialDeEstudio;
 
     // Metodos
@@ -60,6 +59,7 @@ public class Estudiante {
             throw new RuntimeException("No se puede agregar una Tematica ya existente");
         }
         this.tematicas.add(tematica);
+        tematica.setEstudiante(this);
     }
 
     private boolean laTematicaEsExistente(TematicaEstudio tematica) {

@@ -11,8 +11,8 @@ import java.util.*;
 public class IntervaloMenorAMayor implements ITipoBarajador {
 
     @Override
-    public CircularList<MemoCard> barajarComienzoDeSesion(List<MemoCard> memoCardsNuevas, List<MemoCard> memoCardsRepaso, CircularList<MemoCard> memoCardsActivas ) {
-        CircularList<MemoCard> memoCardsBarajadas = new CircularList<>();
+    public List<MemoCard> barajarComienzoDeSesion(List<MemoCard> memoCardsNuevas, List<MemoCard> memoCardsRepaso, List<MemoCard> memoCardsActivas ) {
+        List<MemoCard> memoCardsBarajadas = new ArrayList<>();
         memoCardsBarajadas.addAll(memoCardsNuevas);
         memoCardsBarajadas.addAll(memoCardsRepaso);
 
@@ -21,25 +21,19 @@ public class IntervaloMenorAMayor implements ITipoBarajador {
         memoCardsActivas = barajar(memoCardsActivas);
 
         //añado Todas las memoCards ya barajadas a la listaActiva
-        memoCardsActivas.addAll(memoCardsBarajadas.getElements());
+        var barajaMemoCard = new ArrayList<MemoCard>();
+        barajaMemoCard.addAll(memoCardsActivas);
+        barajaMemoCard.addAll(memoCardsBarajadas);
 
-        return memoCardsActivas;
+        return barajaMemoCard;
     }
 
     @Override
-    public CircularList<MemoCard> barajar(CircularList<MemoCard> memoCards) {
+    public List<MemoCard> barajar(List<MemoCard> memoCards) {
         //Desordeno antes de Ordenar, esto evita patrones repetidos en el orden de las tarjetas
-        List<MemoCard> memoCardsPorBarajadar = memoCards.getElements();
-        Collections.shuffle(memoCardsPorBarajadar);
+        Collections.shuffle(memoCards);
 
-        //Ordeno
-        List<MemoCard> repaso = ordenarMemoCards(memoCardsPorBarajadar);
-
-        //Retorno el valor como CircularList
-        CircularList<MemoCard> memoCardsBarajadas = new CircularList<>();
-        memoCardsBarajadas.addAll(repaso);
-
-        return memoCardsBarajadas;
+        return ordenarMemoCards(memoCards);
     }
 
     @Override

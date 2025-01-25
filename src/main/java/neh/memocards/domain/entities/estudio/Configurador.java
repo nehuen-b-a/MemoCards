@@ -24,7 +24,7 @@ public class Configurador {
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "estudiante_id", referencedColumnName = "estudiantes")
+    @JoinColumn(name = "estudiante_id", referencedColumnName = "id")
     private Estudiante estudiante;
 
     @ElementCollection

@@ -1,6 +1,9 @@
 package neh.memocards.domain.entities.estudio.memocard.estados;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import neh.memocards.domain.entities.estudio.Configurador;
 import neh.memocards.domain.entities.estudio.memocard.Dificultad;
 import neh.memocards.domain.entities.estudio.memocard.MemoCard;
@@ -9,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-
+@NoArgsConstructor
+@Entity
+@DiscriminatorValue("reaprendizaje")
 public class Reaprendizaje extends EstadoMemoCard {
 
     // Atributos

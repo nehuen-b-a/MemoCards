@@ -6,7 +6,7 @@ import utils.CircularList;
 import java.util.List;
 
 public interface ITipoBarajador {
-    CircularList<MemoCard> barajarComienzoDeSesion(List<MemoCard> memoCardsNuevas, List<MemoCard> memoCardsRepaso, CircularList<MemoCard> memoCardsPendientes);
-    CircularList<MemoCard> barajar(CircularList<MemoCard> memoCards);
+    List<MemoCard> barajarComienzoDeSesion(List<MemoCard> memoCardsNuevas, List<MemoCard> memoCardsRepaso, List<MemoCard> memoCardsPendientes);
+    List<MemoCard> barajar(List<MemoCard> memoCards);
     List<MemoCard> ordenarMemoCards(List<MemoCard> memoCards);
 }

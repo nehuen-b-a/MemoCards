@@ -89,6 +89,7 @@ public class SesionDeEstudioTest {
 
         //cuando una memoCard supera el umbral maximo de intervalo por sesion esta sale de la lista activa y al mazo como vista
         sesion.estudiarMemoCard(activas.next(), BIEN);
+        activas = sesion.getMazo().getMemoCardsEnRepasoActivo();
         assertFalse(activas.getElements().stream().anyMatch(memo -> memo.getId() == idMemo), "La carta marcada como BIEN no debe estar como activa");
         assertTrue(mazo.getMemoCardsVistas().stream().anyMatch(memo -> memo.getId() == idMemo));
 

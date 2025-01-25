@@ -32,31 +32,54 @@ public class SesionDeEstudio {
     @Column(name = "tiempo_estudio")
     Long tiempoEstudio;
 
-
+    @ManyToMany
+    @JoinTable(
+            name = "memocards_por_revisar",
+            joinColumns = @JoinColumn(name = "sesion_id",
+                    referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "memo_id", referencedColumnName = "id")
+    )
     Set<MemoCard> memoCardsPorRevisar;
 
+    @ManyToMany
+    @JoinTable(
+            name = "memocards_revisadas",
+            joinColumns = @JoinColumn(name = "sesion_id",
+                    referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "memo_id", referencedColumnName = "id")
+    )
     Set<MemoCard> memoCardsRevisadas;
 
     @Setter
+    @Column(name="cantidad_total_intentos")
     Integer cantidadTotalIntentos;
 
     @Setter
+    @Column(name="cantidad_total_aciertos")
     Integer cantidadTotalAciertos;
 
     @Setter
+    @Column(name="cantidad_total_desaciertos")
     Integer cantidadTotalDesaciertos;
 
     @Setter
+    @Column(name="cantidad_total_dificil")
     Integer cantidadTotalDificil;
 
     @Setter
+    @Column(name="cantidad_total_bien")
     Integer cantidadTotalBien;
 
     @Setter
+    @Column(name="cantidad_total_facil")
     Integer cantidadTotalFacil;
 
+    @Setter
+    @Column(name="fecha_inicio")
     LocalDateTime fechaInicio;
 
+    @Setter
+    @Column(name="fecha_fin")
     LocalDateTime fechaFin;
 
     @Setter

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -27,8 +28,8 @@ public class TematicaEstudio {
     @ManyToOne @JoinColumn(name="estudiante_id", referencedColumnName = "id")
     private Estudiante estudiante;
 
-    @OneToMany(mappedBy = "mazos")
-    private Set<Mazo> mazos;
+    @OneToMany(mappedBy = "tematica")
+    private Set<Mazo> mazos = new HashSet<>();
 
     // Métodos
 

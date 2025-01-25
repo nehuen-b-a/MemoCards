@@ -1,6 +1,8 @@
 package neh.memocards.domain.entities.estudio.memocard.estados;
 
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import neh.memocards.domain.entities.estudio.Configurador;
 import neh.memocards.domain.entities.estudio.memocard.Dificultad;
@@ -8,18 +10,40 @@ import neh.memocards.domain.entities.estudio.memocard.MemoCard;
 
 @Setter
 @Getter
+@Entity
+@NoArgsConstructor
+@Table(name = "estados_memocard")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="estado")
 public abstract class EstadoMemoCard {
     // Atributos
+    @Id
+    @GeneratedValue
     private Long id;
+
+    @Column(name = "nombre", nullable = false)
     private String nombre;
+
+    @OneToOne
+    @JoinColumn(name ="memo_id", referencedColumnName = "id", nullable = false)
     protected MemoCard memoCard;
 
+    @Column(name = "intervalo_actual", nullable = false)
     protected Long intervaloActual;
+
+    @Column(name = "racha_aciertos")
     protected Integer rachaAciertos;
+
+    @Column(name = "racha_desaciertos")
     protected Integer rachaDesaciertos;
 
+    @Column(name = "umbral_sanguijuela", nullable = false)
     private Integer umbralSanguijuela;
+
+    @Column(name = "coeficiente_bonus_facilidad",nullable = false)
     private Double coeficienteDeBonusPorFacilidad;
+
+    @Column(name = "coeficiente_dificultad", nullable = false)
     private Double coeficientePorDificultad;
 
 
