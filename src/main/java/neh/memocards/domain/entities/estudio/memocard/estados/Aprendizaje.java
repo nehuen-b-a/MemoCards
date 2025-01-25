@@ -1,7 +1,6 @@
 package neh.memocards.domain.entities.estudio.memocard.estados;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import neh.memocards.domain.entities.estudio.Configurador;
@@ -16,9 +15,21 @@ import java.util.List;
 public class Aprendizaje extends EstadoMemoCard {
     // Atributos
 
+    @ElementCollection
+    @CollectionTable(
+            name = "estado_intervalos",
+            joinColumns = @JoinColumn(name = "config_id")
+    )
+    @Column(name = "intervalos")
     private List<Long> intervalos;
+
+    @ElementCollection
+    @CollectionTable(
+            name = "estado_intervalos_bonificados",
+            joinColumns = @JoinColumn(name = "config_id")
+    )
     private List<Long> intervalosBonificados;
-    private Double bonificacionTotal;
+
 
 
     // Métodos
@@ -29,7 +40,6 @@ public class Aprendizaje extends EstadoMemoCard {
         this.intervalosBonificados = this.intervalos;
         this.rachaAciertos = 0;
         this.rachaDesaciertos = 0;
-        this.bonificacionTotal = 1d;
     }
 
     @Override

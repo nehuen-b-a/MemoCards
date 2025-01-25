@@ -32,7 +32,7 @@ public class Configurador {
             name = "config_intervalos_iniciales",
             joinColumns = @JoinColumn(name = "config_id")
     )
-    @Column(name = "intervalo")
+    @Column(name = "intervalos")
     private List<Long> intervaloInicial;
 
     @Setter

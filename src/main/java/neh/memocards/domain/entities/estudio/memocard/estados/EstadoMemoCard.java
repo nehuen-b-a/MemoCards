@@ -46,6 +46,10 @@ public abstract class EstadoMemoCard {
     @Column(name = "coeficiente_dificultad", nullable = false)
     private Double coeficientePorDificultad;
 
+    @Column(name = "bonificacionTotal", nullable = false)
+    protected Double bonificacionTotal;
+
+
 
     // Métodos
     public abstract Long cambiarIntervalo(Long intervaloAnterior, Dificultad dificultad);
@@ -65,6 +69,7 @@ public abstract class EstadoMemoCard {
         this.umbralSanguijuela = configurador.getUmbralSanguijuelas();
         this.coeficienteDeBonusPorFacilidad = configurador.getBonusFacil();
         this.coeficientePorDificultad = configurador.getBonusDificil();
+        this.bonificacionTotal = 1d;
     }
 
 
