@@ -3,156 +3,209 @@ left to right direction
 
 ' Entidades principales
 entity Usuario {
-    + id : INTEGER(11) [PK]
+    + id : BIGINT [PK]
     --
     nombre : VARCHAR(255)
     clave : VARCHAR(255)
-    rol_id : INTEGER(11) [FK]
+    rol_id : BIGINT [FK]
 }
 
 entity Rol {
-    + id : INTEGER(11) [PK]
+    + id : BIGINT [PK]
     --
-    tipoRol : VARCHAR(255)
+    tipo_rol : VARCHAR(255)
 }
 
 entity Permiso {
-    + id : INTEGER(11) [PK]
+    + id : BIGINT [PK]
     --
     nombre : VARCHAR(255)
+}
+
+entity RolPermiso {
+    + rol_id : BIGINT [PK, FK]
+    + permiso_id : BIGINT [PK, FK]
 }
 
 entity Estudiante {
-    + id : INTEGER(11) [PK]
+    + id : BIGINT [PK]
     --
     nombre : VARCHAR(255)
     apellido : VARCHAR(255)
-    usuario_id : INTEGER(11) [FK]
+    usuario_id : BIGINT [FK]
 }
 
 entity TematicaEstudio {
-    + id : INTEGER(11) [PK]
+    + id : BIGINT [PK]
     --
-    estudiante_id : INTEGER(11) [FK]
+    estudiante_id : BIGINT [FK]
     nombre : VARCHAR(255)
     descripcion : VARCHAR(255)
 }
 
 entity Mazo {
-    + id : INTEGER(11) [PK]
+    + id : BIGINT [PK]
     --
     nombre : VARCHAR(255)
     descripcion : VARCHAR(255)
-    tematica_id : INTEGER(11) [FK]
-    configurador_id : INTEGER(11) [FK]
+    tematica_id : BIGINT [FK]
+    config_id : BIGINT [FK]
+    fecha_ultima_nueva_inclusion : DATETIME
 }
 
-entity Configurador {
-    + id : INTEGER(11) [PK]
+entity Configuracion {
+    + id : BIGINT [PK]
     --
-    estudiante_id : INTEGER(11) [FK]
-    intervaloInicial : VARCHAR(255)
-    distanciaPorcentualIntervalo : DOUBLE
-    coeficienteDeRetencion : DOUBLE
-    bonusFacil : DOUBLE
-    bonusDificil : DOUBLE
-    intervaloMinimo : INTEGER(11)
-    intervaloMaximo : INTEGER(11)
-    umbralSanguijuelas : SMALLINT
-    maximoDeNuevasCartas : SMALLINT
-    maximoDeCartasARepasar : SMALLINT
-    intervaloMaximoARevisarEnUnaSesion : INTEGER(11)
-    intervaloParaIncluirMemoCardsNuevas : INTEGER(11)
+    estudiante_id : BIGINT [FK]
+    distancia_porcentual_intervalo : DOUBLE
+    coeficiente_de_retencion : DOUBLE
+    bonus_facil : DOUBLE
+    bonus_dificil : DOUBLE
+    intervalo_min : BIGINT
+    intervalo_max : BIGINT
+    umbral_sanguijuelas : INT
+    maximo_de_nuevas_cartas : INT
+    maximo_de_cartas_a_repasar : INT
+    intervalo_inclusion_nuevas_memocards : BIGINT
+    intervalo_max_x_sesion : BIGINT
+    barajador : VARCHAR(255)
+}
+
+entity ConfigIntervalosIniciales {
+    + config_id : BIGINT [PK, FK]
+    --
+    intervalo : BIGINT
 }
 
 entity MemoCard {
-    + id : INTEGER(11) [PK]
+    + id : BIGINT [PK]
     --
     nombre : VARCHAR(255)
     pregunta : VARCHAR(255)
-    respuesta_id : INTEGER(11) [FK]
-    fechaUltimoRepaso : DATETIME
-    estadoMemoCard : EstadoMemoCard
-    configurador_id : INTEGER(11) [FK]
-    intervaloMinutos : INTEGER(11)
-    cantidadDeOlvidos : SMALLINT
-    intentos : SMALLINT
-    esSanguijuela : BIT
-    esNueva : BIT
-    mazo_id : INTEGER(11) [FK]
+    rta_id : BIGINT [FK]
+    fecha_ultimo_repaso : DATETIME
+    intervalo_minutos : BIGINT
+    cantidad_olvidos : INT
+    intentos : INT
+    es_sanguijuela : BIT
+    es_nueva : BIT
+    mazo_id : BIGINT [FK]
+    memocard_no_vista_id : BIGINT [FK]
+    memocard_vista_id : BIGINT [FK]
+    config_id : BIGINT [FK]
+    sesion_id : BIGINT [FK]
 }
 
 entity EstadoMemoCard {
-    + id : INTEGER(11) [PK]
+    + id : BIGINT [PK]
     --
-    tipo : VARCHAR(255) [Discriminador]
+    estado : VARCHAR(31)
     nombre : VARCHAR(255)
-    intervaloActual : INTEGER(11)
-    rachaAciertos : SMALLINT
-    rachaDesaciertos : SMALLINT
-    umbralSanguijuela : SMALLINT
-    coeficienteDeBonusPorFacilidad : DOUBLE
-    coeficientePorDificultad : DOUBLE
-    intervalos : VARCHAR(255) [Aprendizaje, Reaprendizaje]
-    intervalosBonificados : VARCHAR(255) [Aprendizaje, Reaprendizaje]
-    bonificacionTotal : DOUBLE [Aprendizaje, Reaprendizaje]
-    distanciaPorcentualIntervalo : DOUBLE [Reaprendizaje]
-    intervaloMin : INTEGER(11) [Reaprendizaje]
-    coeficienteDeRetencion : DOUBLE [Repaso]
-    intervaloMax : INTEGER(11) [Repaso]
+    intervalo_actual : BIGINT
+    racha_aciertos : INT
+    racha_desaciertos : INT
+    umbral_sanguijuela : INT
+    coeficiente_bonus_facilidad : DOUBLE
+    coeficiente_dificultad : DOUBLE
+    bonificacion_total : DOUBLE
+    coeficiente_de_retencion : DOUBLE
+    distancia_porcentual_intervalo : DOUBLE
+    intervalo_max : BIGINT
+    intervalo_min : BIGINT
+    memo_id : BIGINT [FK]
+}
+
+' Nuevas tablas de intervalos
+entity EstadoIntervalos {
+    + config_id : BIGINT [PK, FK]
+    --
+    intervalos : BIGINT
+}
+
+entity EstadoIntervalosBonificados {
+    + config_id : BIGINT [PK, FK]
+    --
+    intervalos_bonificados : BIGINT
 }
 
 entity RespuestaMemo {
-    + id : INTEGER(11) [PK]
+    + id : BIGINT [PK]
     --
     texto : VARCHAR(255)
-    rutaImagen : VARCHAR(255)
-    rutaAudio : VARCHAR(255)
-    rutaVideo : VARCHAR(255)
+    ruta_imagen : VARCHAR(255)
+    ruta_audio : VARCHAR(255)
+    ruta_video : VARCHAR(255)
 }
 
 entity SesionDeEstudio {
-    + id : INTEGER(11) [PK]
+    + id : BIGINT [PK]
     --
-    estudiante_id : INTEGER(11) [FK]
-    mazo_id : INTEGER(11) [FK]
-    tiempoEstudio : INTEGER(11)
-    cantidadTotalIntentos : SMALLINT
-    cantidadTotalAciertos : SMALLINT
-    cantidadTotalDesaciertos : SMALLINT
-    cantidadTotalDificil : SMALLINT
-    cantidadTotalBien : SMALLINT
-    cantidadTotalFacil : SMALLINT
-    fechaInicio : DATETIME
-    fechaFin : DATETIME
-    estaFinalizada : BIT
+    estudiante_id : BIGINT [FK]
+    mazo_id : BIGINT [FK]
+    tiempo_estudio : BIGINT
+    cantidad_total_intentos : INT
+    cantidad_total_aciertos : INT
+    cantidad_total_desaciertos : INT
+    cantidad_total_dificil : INT
+    cantidad_total_bien : INT
+    cantidad_total_facil : INT
+    fecha_inicio : DATETIME
+    fecha_fin : DATETIME
+    esta_finalizada : BIT
 }
 
 entity HistorialEstadoMemoCard {
-    + id : INTEGER(11) [PK]
+    + id : BIGINT [PK]
     --
-    memoCard_id : INTEGER(11) [FK]
-    estadoAnterior : EstadoMemoCard  [FK]
-    estadoNuevo : EstadoMemoCard  [FK]
-    fechaCambio : DATETIME
+    memo_id : BIGINT [FK]
+    estado_anterior_id : BIGINT [FK]
+    estado_nuevo_id : BIGINT [FK]
+    fecha_cambio : DATETIME
 }
 
-' Relaciones
+' Tablas de unión M:N
+entity MazoMemocardActivas {
+    + mazo_id : BIGINT [PK, FK]
+    + memocard_id : BIGINT [PK, FK]
+}
+
+entity MemocardsPorRevisar {
+    + memo_id : BIGINT [PK, FK]
+    + sesion_id : BIGINT [PK, FK]
+}
+
+entity MemocardsRevisadas {
+    + memo_id : BIGINT [PK, FK]
+    + sesion_id : BIGINT [PK, FK]
+}
+
+' Relaciones actualizadas
 Usuario }|--|| Rol
-Rol ||--o{ Permiso
+Rol ||--o{ RolPermiso
+Permiso ||--o{ RolPermiso
 Estudiante }|--|| Usuario
 Estudiante ||--|{ TematicaEstudio
 TematicaEstudio ||--o{ Mazo
-Mazo }|--|| Configurador
-Mazo ||--o{ MemoCard
+Mazo }|--|| Configuracion
+Mazo ||--o{ MazoMemocardActivas
+MemoCard ||--o{ MazoMemocardActivas
+Configuracion ||--o{ ConfigIntervalosIniciales
+MemoCard }|--|| Configuracion
 MemoCard ||--o| RespuestaMemo
-MemoCard }|--|| Configurador
-MemoCard ||--o{ HistorialEstadoMemoCard
 MemoCard }|--|| EstadoMemoCard
-HistorialEstadoMemoCard }|--|| EstadoMemoCard : estadoAnterior
-HistorialEstadoMemoCard }|--|| EstadoMemoCard : estadoNuevo
+MemoCard }|--|| Mazo : memocard_no_vista_id
+MemoCard }|--|| Mazo : memocard_vista_id
+HistorialEstadoMemoCard }|--|| EstadoMemoCard : estado_anterior_id
+HistorialEstadoMemoCard }|--|| EstadoMemoCard : estado_nuevo_id
 SesionDeEstudio }|--|| Estudiante
 SesionDeEstudio }|--|| Mazo
-SesionDeEstudio ||--o{ MemoCard
+SesionDeEstudio ||--o{ MemocardsPorRevisar
+SesionDeEstudio ||--o{ MemocardsRevisadas
+MemoCard ||--o{ MemocardsPorRevisar
+MemoCard ||--o{ MemocardsRevisadas
+
+' Nuevas relaciones para intervalos
+EstadoMemoCard ||--o{ EstadoIntervalos
+EstadoMemoCard ||--o{ EstadoIntervalosBonificados
 
 @enduml
