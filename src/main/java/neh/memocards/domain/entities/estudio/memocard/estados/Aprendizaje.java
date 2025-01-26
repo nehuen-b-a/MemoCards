@@ -18,7 +18,7 @@ public class Aprendizaje extends EstadoMemoCard {
     @ElementCollection
     @CollectionTable(
             name = "estado_intervalos",
-            joinColumns = @JoinColumn(name = "config_id")
+            joinColumns = @JoinColumn(name = "estado_id")
     )
     @Column(name = "intervalos")
     private List<Long> intervalos;
@@ -26,7 +26,7 @@ public class Aprendizaje extends EstadoMemoCard {
     @ElementCollection
     @CollectionTable(
             name = "estado_intervalos_bonificados",
-            joinColumns = @JoinColumn(name = "config_id")
+            joinColumns = @JoinColumn(name = "estado_id")
     )
     private List<Long> intervalosBonificados;
 
