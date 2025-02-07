@@ -13,22 +13,13 @@ public class RespuestaMemo {
     @Id @GeneratedValue
     private Long id;
 
-    @Column(name = "texto", nullable = false)
-    private String texto;
-
-    @Column(name = "rutaImagen", nullable = false)
-    private String rutaImagen;
-
-    @Column(name = "rutaAudio", nullable = false)
-    private String rutaAudio;
-
-    @Column(name = "rutaVideo", nullable = false)
-    private String rutaVideo;
+    @Column(name = "respuesta-markdonw", nullable = false)
+    private String respuestaMarkdonw;
 
     // Métodos (por implementar según necesidades)
 
     public RespuestaMemo(String texto) {
         new RespuestaMemo();
-        this.texto = texto;
+        this.respuestaMarkdonw = texto;
     }
 }
